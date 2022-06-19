@@ -7,4 +7,5 @@ app_name = 'baseapp'
 
 urlpatterns = [
     path('', views.index_view, name='index'),
+    path('<str:room_name>/', views.room, name='room'),
 ]
