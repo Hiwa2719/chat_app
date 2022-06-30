@@ -12,7 +12,11 @@ channels-redis==3.4.0
 constantly==15.1.0
 cryptography==37.0.2
 daphne==3.0.2
+distlib==0.3.4
 Django==4.0.5
+djangorestframework==3.13.1
+djangorestframework-simplejwt==5.2.0
+filelock==3.7.1
 h11==0.13.0
 hiredis==2.0.0
 hyperlink==21.0.0
@@ -20,11 +24,14 @@ idna==3.3
 incremental==21.3.0
 msgpack==1.0.4
 outcome==1.2.0
+platformdirs==2.5.2
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pycparser==2.21
+PyJWT==2.4.0
 pyOpenSSL==22.0.0
 PySocks==1.7.1
+pytz==2022.1
 selenium==4.3.0
 service-identity==21.1.0
 six==1.16.0
@@ -38,5 +45,6 @@ txaio==22.2.1
 typing_extensions==4.2.0
 tzdata==2022.1
 urllib3==1.26.9
+virtualenv==20.15.1
 wsproto==1.1.0
 zope.interface==5.4.0
