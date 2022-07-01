@@ -1,8 +1,10 @@
 import {
+    SIGNUP_FAIL,
+    SIGNUP_REQUEST,
+    SIGNUP_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
-    USER_LOGIN_SUCCESS, USERNAME_CHECK_FAIL,
-    USERNAME_CHECK_REQUEST, USERNAME_CHECK_SUCCESS
+    USER_LOGIN_SUCCESS
 } from "../constants/userConstants";
 import axios from "axios";
 
@@ -14,7 +16,7 @@ export const userLoginAction = (authenticationData) => async (dispatch) => {
         })
 
         const config = {
-            headers : {
+            headers: {
                 'Content-type': 'application/json'
             }
         }
@@ -28,7 +30,7 @@ export const userLoginAction = (authenticationData) => async (dispatch) => {
 
         localStorage.setItem('userInfo', JSON.stringify(data))
 
-    }catch (e) {
+    } catch (e) {
         console.log(e)
         dispatch({
             type: USER_LOGIN_FAIL,
@@ -37,30 +39,29 @@ export const userLoginAction = (authenticationData) => async (dispatch) => {
 }
 
 
-export const usernameCheckAction = (username) => async (dispatch) => {
-    try{
+export const signupAction = (userInfo) => async (dispatch) => {
+    try {
         dispatch({
-            type: USERNAME_CHECK_REQUEST,
+            type: SIGNUP_REQUEST,
         })
 
         const config = {
             headers: {
-              'Content-type': 'application/json'
+                'Content-type': 'application/json'
             }
         }
 
-        const {data} =await axios.get(`/chat/check-username/${username}/`, config)
+        const {data} = await axios.post(`/chat/signup/`, userInfo, config)
 
         dispatch({
-            type: USERNAME_CHECK_SUCCESS,
+            type: SIGNUP_SUCCESS,
             payload: data
         })
 
-    }catch (e) {
-        console.log(e)
+    } catch (e) {
         dispatch({
-            type: USERNAME_CHECK_FAIL,
-            payload: e.response
+            type: SIGNUP_FAIL,
+            payload: e.response && e.response.data ? e.response.data : e.message
         })
     }
 }

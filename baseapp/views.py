@@ -1,9 +1,11 @@
-from django.shortcuts import render
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.views import TokenObtainPairView
+from django.shortcuts import render
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import MyTokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer
 
 User = get_user_model()
 
@@ -22,9 +24,11 @@ class LoginView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
-@api_view()
-def check_username(request, username):
-    username_exist = User.objects.filter(username=username).exists()
-    return Response({
-        'usernameExist': username_exist
-    })
+@api_view(['POST'])
+def signup(request):
+    serializer = UserCreationSerializer(data=request.data)
+    if serializer.is_valid():
+        user = serializer.save()
+        token_serializer = MyTokenObtainPairSerializer(user)
+        return Response(token_serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

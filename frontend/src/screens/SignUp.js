@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {usernameCheckAction} from "../redux/actions/userActions";
+import {signupAction} from "../redux/actions/userActions";
 
 const SignUp = () => {
     const [username, setUsername] = useState('')
@@ -10,15 +10,11 @@ const SignUp = () => {
     const dispatch = useDispatch()
     const {usernameCheckLoading, usernameCheckSuccess, usernameCheckFail} = useSelector(state => state.usernameCheck)
 
-
-    const usernameHandler = (e) => {
-        setUsername(e.target.value)
-        dispatch(usernameCheckAction(username))
-    }
-
     const submitHandler = (e) => {
         e.preventDefault()
-        // todo adding two passwords match checking
+        if (password1 === password2) {
+            dispatch(signupAction({username: username, password: password1}))
+        }
     }
 
     return (
@@ -29,7 +25,7 @@ const SignUp = () => {
                     <div className="mb-3">
                         <label htmlFor="username" className="form-label">User Name</label>
                         <input type="text" className="form-control" id="username" placeholder="User Name"
-                               onChange={usernameHandler}/>
+                               onChange={(e) => setUsername(e.target.value)}/>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="password1" className="form-label">Password</label>

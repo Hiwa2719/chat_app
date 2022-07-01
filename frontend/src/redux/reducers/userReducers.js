@@ -2,8 +2,8 @@ import {
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS,
-    USER_LOGOUT, USERNAME_CHECK_FAIL,
-    USERNAME_CHECK_REQUEST, USERNAME_CHECK_SUCCESS
+    USER_LOGOUT, SIGNUP_FAIL,
+    SIGNUP_REQUEST, SIGNUP_SUCCESS
 } from "../constants/userConstants";
 
 
@@ -25,11 +25,11 @@ export const userLoginReducer = (state = {}, action) => {
 
 export const usernameCheckReducer = (state = {}, action) => {
     switch (action.type) {
-        case USERNAME_CHECK_REQUEST:
+        case SIGNUP_REQUEST:
             return {loading: true}
-        case USERNAME_CHECK_SUCCESS:
+        case SIGNUP_SUCCESS:
             return {loading: false, success: true, usernameExist: action.payload.usernameExist}
-        case USERNAME_CHECK_FAIL:
+        case SIGNUP_FAIL:
             return {loading: false, error: action.payload}
         default:
             return state
