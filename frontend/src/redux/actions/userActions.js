@@ -1,7 +1,6 @@
 import {
     SIGNUP_FAIL,
     SIGNUP_REQUEST,
-    SIGNUP_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_SUCCESS
@@ -54,9 +53,11 @@ export const signupAction = (userInfo) => async (dispatch) => {
         const {data} = await axios.post(`/chat/signup/`, userInfo, config)
 
         dispatch({
-            type: SIGNUP_SUCCESS,
+            type: USER_LOGIN_SUCCESS,
             payload: data
         })
+
+        localStorage.setItem('userInfo', JSON.stringify(data))
 
     } catch (e) {
         dispatch({

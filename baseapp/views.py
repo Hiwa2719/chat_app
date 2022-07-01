@@ -31,4 +31,8 @@ def signup(request):
         user = serializer.save()
         token_serializer = MyTokenObtainPairSerializer(user)
         return Response(token_serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response({
+        'errors': serializer.errors.values()
+    },
+        status=status.HTTP_400_BAD_REQUEST
+    )
