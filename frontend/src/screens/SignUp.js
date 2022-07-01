@@ -1,14 +1,19 @@
 import React, {useState} from "react";
-import axios from "axios";
+import {useDispatch, useSelector} from "react-redux";
+import {usernameCheckAction} from "../redux/actions/userActions";
 
 const SignUp = () => {
     const [username, setUsername] = useState('')
     const [password1, setPassword1] = useState('')
     const [password2, setPassword2] = useState('')
 
+    const dispatch = useDispatch()
+    const {usernameCheckLoading, usernameCheckSuccess, usernameCheckFail} = useSelector(state => state.usernameCheck)
+
+
     const usernameHandler = (e) => {
         setUsername(e.target.value)
-        // todo adding check username exists action
+        dispatch(usernameCheckAction(username))
     }
 
     const submitHandler = (e) => {
