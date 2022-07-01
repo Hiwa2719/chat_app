@@ -4,6 +4,7 @@ import {signupAction} from "../redux/actions/userActions";
 import Alert from "../components/alert";
 import {SIGNUP_RESET} from "../redux/constants/userConstants";
 import {useNavigate} from "react-router-dom";
+import Loader from "../components/loader";
 
 const SignUp = () => {
     const [username, setUsername] = useState('')
@@ -94,7 +95,10 @@ const SignUp = () => {
                                     )
                                 }
                             </div>
-                            <button type="submit" className="btn btn-primary mb-5">Submit</button>
+                            <button type="submit" className="btn btn-primary mb-5">
+                                {loading && <Loader/>}
+                                Submit
+                            </button>
                         </form>
                     </div>
                 </div>
