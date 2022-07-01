@@ -49,12 +49,13 @@ export const usernameCheckAction = (username) => async (dispatch) => {
             }
         }
 
-        const {data} = axios.get(`/chat/check-username/${username}/`, config)
+        const {data} =await axios.get(`/chat/check-username/${username}/`, config)
 
         dispatch({
             type: USERNAME_CHECK_SUCCESS,
             payload: data
         })
+
     }catch (e) {
         console.log(e)
         dispatch({

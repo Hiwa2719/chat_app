@@ -28,7 +28,7 @@ export const usernameCheckReducer = (state = {}, action) => {
         case USERNAME_CHECK_REQUEST:
             return {loading: true}
         case USERNAME_CHECK_SUCCESS:
-            return {loading: false, success: true}
+            return {loading: false, success: true, usernameExist: action.payload.usernameExist}
         case USERNAME_CHECK_FAIL:
             return {loading: false, error: action.payload}
         default:
