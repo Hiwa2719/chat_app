@@ -5,13 +5,22 @@ User = get_user_model()
 
 
 class Message(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='author_messages')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey('Group', on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.author.username
 
-    @classmethod
-    def last_10_messages(cls):
-        return cls.objects.order_by('-timestamp')[:10]
+
+class Person(User):
+    contacts = models.ManyToManyField('self')
+
+
+class Group(models.Model):
+    name = models.CharField(max_length=256)
+    members = models.ManyToManyField(User)
+
+    def __str__(self):
+        return self.name
