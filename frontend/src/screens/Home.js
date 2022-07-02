@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {userLoginAction} from "../redux/actions/userActions";
 import Loader from "../components/loader";
 import Alert from "../components/alert";
@@ -74,6 +74,9 @@ const Home = () => {
                         Submit
                     </button>
                 </form>
+                <p>
+                    <Link to="/signup/" className="text-decoration-none">Not registered yet, Here is Signup page</Link>
+                </p>
             </div>
         </div>
     )

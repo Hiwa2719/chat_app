@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {signupAction} from "../redux/actions/userActions";
 import Alert from "../components/alert";
 import {SIGNUP_RESET} from "../redux/constants/userConstants";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Loader from "../components/loader";
 
 const SignUp = () => {
@@ -100,6 +100,9 @@ const SignUp = () => {
                                 Submit
                             </button>
                         </form>
+                        <p>
+                            <Link to="/" className="text-decoration-none">already registered, Here is login page</Link>
+                        </p>
                     </div>
                 </div>
 
