@@ -8,7 +8,7 @@ import {
 import axios from "axios";
 
 
-export const userLoginAction = (authenticationData) => async (dispatch) => {
+export const userLoginAction = (userInfo) => async (dispatch) => {
     try {
         dispatch({
             type: USER_LOGIN_REQUEST
@@ -20,7 +20,7 @@ export const userLoginAction = (authenticationData) => async (dispatch) => {
             }
         }
 
-        const {data} = await axios.post('/login/', authenticationData)
+        const {data} = await axios.post('/chat/login/', userInfo, config)
 
         dispatch({
             type: USER_LOGIN_SUCCESS,
