@@ -4,6 +4,8 @@ import {Link, useNavigate} from "react-router-dom";
 import {userLoginAction} from "../redux/actions/userActions";
 import Loader from "../components/loader";
 import Alert from "../components/alert";
+import {USER_LOGIN_RESET} from "../redux/constants/userConstants";
+
 
 const Home = () => {
     const dispatch = useDispatch()
@@ -31,11 +33,17 @@ const Home = () => {
     const usernameHandler = (e) => {
         setUsername(e.target.value)
         setEmptyField(false)
+        dispatch({
+            type: USER_LOGIN_RESET
+        })
     }
 
     const passwordHandler = (e) => {
         setPassword(e.target.value)
         setEmptyField(false)
+        dispatch({
+            type: USER_LOGIN_RESET
+        })
     }
 
     return (
