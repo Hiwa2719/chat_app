@@ -3,12 +3,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {getChatListAction} from "../redux/actions/chatsActions";
 import {logoutAction} from '../redux/actions/userActions'
+import Loader from "./loader";
 
 
 const SideBar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {groups} = useSelector(state => state.chats)
+    const {groups, loading: chatsLoading, error: chatsError} = useSelector(state => state.chats)
     const {userInfo} = useSelector(state => state.userLogin)
 
     const lockHandler = (e) => {
@@ -43,16 +44,46 @@ const SideBar = () => {
                 </div>
             </div>
             <div>
-                messages/contacts/userinfo
-            </div>
-            <div className="h-100">
-                {
-                    groups.map(group => (
-                        <div key={group.id}>
+                <nav>
+                    <div className="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+                        <button className="nav-link active" id="nav-chats-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-chats" type="button" role="tab" aria-controls="nav-chats"
+                                aria-selected="true" onClick={(e) => dispatch(getChatListAction())}>
+                            {
+                                chatsLoading&& <Loader/>
+                            }
 
-                        </div>
-                    ))
-                }
+                            Chats
+                        </button>
+                        <button className="nav-link" id="nav-contacts-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-contacts" type="button" role="tab" aria-controls="nav-contacts"
+                                aria-selected="false">Contacts
+                        </button>
+                        <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
+                                aria-selected="false">Profile
+                        </button>
+                    </div>
+                </nav>
+                <div className="tab-content" id="nav-tabContent">
+                    <div className="tab-pane fade show active" id="nav-chats" role="tabpanel"
+                         aria-labelledby="nav-chats-tab">
+                        {
+                            groups && (
+                            groups.map(group => (
+                                <div key={group.id}>
+
+                                </div>
+                            )))
+                        }
+                    </div>
+                    <div className="tab-pane fade" id="nav-contacts" role="tabpanel"
+                         aria-labelledby="nav-contacts-tab">...
+                    </div>
+                    <div className="tab-pane fade" id="nav-profile" role="tabpanel"
+                         aria-labelledby="nav-profile-tab">...
+                    </div>
+                </div>
             </div>
         </div>
     )

@@ -2,6 +2,7 @@ import './App.css';
 import {Routes, Route} from 'react-router-dom'
 import Home from './screens/Home'
 import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap/dist/js/bootstrap'
 import SignUp from "./screens/SignUp";
 import Account from "./screens/account";
 

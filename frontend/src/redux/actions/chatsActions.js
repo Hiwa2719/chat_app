@@ -1,4 +1,4 @@
-import {CHATS_LIST_REQUEST, CHATS_LIST_SUCCESS} from "../constants/chatConstants";
+import {CHATS_LIST_FAIL, CHATS_LIST_REQUEST, CHATS_LIST_SUCCESS} from "../constants/chatConstants";
 import axios from "axios";
 
 
@@ -26,5 +26,9 @@ export const getChatListAction = () => async (dispatch, getState) => {
 
     }catch (e) {
         console.log(e)
+        dispatch({
+            type: CHATS_LIST_FAIL,
+            payload: e.response
+        })
     }
 }
