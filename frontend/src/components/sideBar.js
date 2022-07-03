@@ -1,20 +1,26 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
-import {USER_LOGIN_RESET} from "../redux/constants/userConstants";
 import {useNavigate} from "react-router-dom";
+import {getChatListAction} from "../redux/actions/chatsActions";
+import {logoutAction} from '../redux/actions/userActions'
 
 
 const SideBar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {groups} = useSelector(state => state.chats)
+    const {userInfo} = useSelector(state => state.userLogin)
 
     const lockHandler = (e) => {
-        dispatch({
-            type: USER_LOGIN_RESET
-        })
+        dispatch(logoutAction())
         navigate('/')
     }
+
+    useEffect(() => {
+        if (userInfo) {
+            dispatch(getChatListAction())
+        }
+    }, [userInfo])
 
     return (
         <div className="bg-dark h-100 p-2">
@@ -40,7 +46,13 @@ const SideBar = () => {
                 messages/contacts/userinfo
             </div>
             <div className="h-100">
+                {
+                    groups.map(group => (
+                        <div key={group.id}>
 
+                        </div>
+                    ))
+                }
             </div>
         </div>
     )

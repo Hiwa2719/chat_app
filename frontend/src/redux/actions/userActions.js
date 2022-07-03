@@ -2,10 +2,11 @@ import {
     SIGNUP_FAIL,
     SIGNUP_REQUEST,
     USER_LOGIN_FAIL,
-    USER_LOGIN_REQUEST,
+    USER_LOGIN_REQUEST, USER_LOGIN_RESET,
     USER_LOGIN_SUCCESS
 } from "../constants/userConstants";
 import axios from "axios";
+import {CHATS_LIST_RESET} from "../constants/chatConstants";
 
 
 export const userLoginAction = (userInfo) => async (dispatch) => {
@@ -65,4 +66,15 @@ export const signupAction = (userInfo) => async (dispatch) => {
             payload: e.response && e.response.data ? e.response.data : e.message
         })
     }
+}
+
+
+export const logoutAction = () =>async (dispatch) => {
+    dispatch({
+        type: USER_LOGIN_RESET
+    })
+
+    dispatch({
+        type: CHATS_LIST_RESET
+    })
 }
