@@ -1,9 +1,10 @@
 import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {getChatListAction} from "../redux/actions/chatsActions";
-import {logoutAction} from '../redux/actions/userActions'
-import Loader from "./loader";
+import {getChatListAction} from "../../redux/actions/chatsActions";
+import {logoutAction} from '../../redux/actions/userActions'
+import Loader from "../loader";
+import Profile from "./profile";
 
 
 const SideBar = () => {
@@ -81,7 +82,8 @@ const SideBar = () => {
                          aria-labelledby="nav-contacts-tab">...
                     </div>
                     <div className="tab-pane fade" id="nav-profile" role="tabpanel"
-                         aria-labelledby="nav-profile-tab">...
+                         aria-labelledby="nav-profile-tab">
+                        <Profile/>
                     </div>
                 </div>
             </div>
