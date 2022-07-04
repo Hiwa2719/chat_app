@@ -1,16 +1,24 @@
 from django.contrib.auth import password_validation, get_user_model
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.core.exceptions import ValidationError
-
 
 User = get_user_model()
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = 'username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined'
+
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+
     def validate(self, attrs):
         data = super().validate(attrs)
         del data['refresh']
+        serializer = UserSerializer(self.user)
+        data.update(serializer.data)
         return data
 
 
