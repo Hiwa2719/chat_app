@@ -87,7 +87,7 @@ export const logoutAction = () => async (dispatch) => {
 }
 
 
-export const updateUserProfileAction = (userInfo) => async (dispatch, getState) => {
+export const updateUserProfileAction = (updateData) => async (dispatch, getState) => {
     try {
         dispatch({
             type: UPDATE_USER_PROFILE_REQUEST
@@ -102,7 +102,7 @@ export const updateUserProfileAction = (userInfo) => async (dispatch, getState) 
             }
         }
 
-        const {data} = axios.post('/chat/update-profile/', userInfo, config)
+        const {data} =await axios.post('/chat/update-profile/', updateData, config)
 
         dispatch({
             type: UPDATE_USER_PROFILE_SUCCESS
@@ -114,9 +114,10 @@ export const updateUserProfileAction = (userInfo) => async (dispatch, getState) 
         })
 
     } catch (e) {
+        console.log(e)
         dispatch({
             type: UPDATE_USER_PROFILE_FAIL,
-            payload: e.response && e.response.data ? e.response.data : e.message
+            payload: e.response && e.response.data ? e.response.data.errors : e.message
         })
     }
 }

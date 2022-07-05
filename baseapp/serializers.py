@@ -2,14 +2,21 @@ from django.contrib.auth import password_validation, get_user_model
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.tokens import RefreshToken
 
 User = get_user_model()
 
 
 class UserSerializer(serializers.ModelSerializer):
+    access = serializers.SerializerMethodField(required=False)
+
     class Meta:
         model = User
-        fields = 'username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined'
+        fields = 'username', 'first_name', 'last_name', 'email', 'last_login', 'date_joined', 'access'
+
+    def get_access(self, obj):
+        token = RefreshToken.for_user(self.instance)
+        return str(token.access_token)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -40,4 +47,7 @@ class UserCreationSerializer(serializers.Serializer):
         return attrs
 
     def create(self, validated_data):
-        return User.objects.create(**validated_data)
+        user = User.objects.create(**validated_data)
+        user.set_password(validated_data['password'])
+        user.save()
+        return user

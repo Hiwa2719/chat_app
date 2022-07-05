@@ -1,11 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer
+from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -29,10 +30,24 @@ def signup(request):
     serializer = UserCreationSerializer(data=request.data)
     if serializer.is_valid():
         user = serializer.save()
-        token_serializer = MyTokenObtainPairSerializer(user)
+        token_serializer = UserSerializer(user)
         return Response(token_serializer.data)
     return Response({
         'errors': serializer.errors.values()
     },
         status=status.HTTP_400_BAD_REQUEST
     )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    user = request.user
+    serializer = UserSerializer(user, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        user.refresh_from_db()
+        serializer_with_token = UserSerializer(user)
+        return Response(serializer_with_token.data)
+    errors = {'errors': serializer.errors.values()}
+    return Response(errors, status=status.HTTP_400_BAD_REQUEST)
