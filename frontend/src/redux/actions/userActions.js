@@ -114,7 +114,6 @@ export const updateUserProfileAction = (updateData) => async (dispatch, getState
         })
 
     } catch (e) {
-        console.log(e)
         dispatch({
             type: UPDATE_USER_PROFILE_FAIL,
             payload: e.response && e.response.data ? e.response.data.errors : e.message
