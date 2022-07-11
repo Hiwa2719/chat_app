@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer, UserSerializer
+from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer, UserSerializer, ChatSerializer
 
 User = get_user_model()
 
@@ -51,3 +51,11 @@ def update_profile(request):
         return Response(serializer_with_token.data)
     errors = {'errors': serializer.errors.values()}
     return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def user_chats(request):
+    chats = request.user.chat_set.all()
+    serializer = ChatSerializer(chats, many=True)
+    return Response(serializer.data)

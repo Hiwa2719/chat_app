@@ -4,6 +4,8 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from .models import Chat, Message
+
 User = get_user_model()
 
 
@@ -51,3 +53,22 @@ class UserCreationSerializer(serializers.Serializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Message
+        exclude = 'chat',
+
+
+class ChatSerializer(serializers.ModelSerializer):
+    messages = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Chat
+        fields = '__all__'
+
+    def get_messages(self, obj):
+        messages = obj.message_set.order_by('-timestamp')[:10]
+        serializer = MessageSerializer(messages, many=True)
+        return serializer.data

@@ -17,7 +17,7 @@ export const getChatListAction = () => async (dispatch, getState) => {
             }
         }
 
-        const {data} = await axios.get('chat/groups/', config)
+        const {data} = await axios.get('/chat/chats/', config)
 
         dispatch({
             type: CHATS_LIST_SUCCESS,
