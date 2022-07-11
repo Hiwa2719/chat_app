@@ -5,7 +5,7 @@ export const getChatListReducer = (state = {groups: []}, action) => {
         case CHATS_LIST_REQUEST:
             return {loading: true, ...state}
         case CHATS_LIST_SUCCESS:
-            return {loading: false, groups: action.payload}
+            return {loading: false, chats: action.payload}
         case CHATS_LIST_FAIL:
             return {loading: false, error: action.payload}
         case CHATS_LIST_RESET:

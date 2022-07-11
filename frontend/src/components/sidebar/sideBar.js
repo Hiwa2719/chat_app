@@ -3,14 +3,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {getChatListAction} from "../../redux/actions/chatsActions";
 import {logoutAction} from '../../redux/actions/userActions'
-import Loader from "../loader";
 import Profile from "./profile";
+import Chats from "./chats";
 
 
 const SideBar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    const {groups, loading: chatsLoading, error: chatsError} = useSelector(state => state.chats)
     const {userInfo} = useSelector(state => state.userLogin)
 
     const lockHandler = (e) => {
@@ -50,10 +49,6 @@ const SideBar = () => {
                         <button className="nav-link active" id="nav-chats-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-chats" type="button" role="tab" aria-controls="nav-chats"
                                 aria-selected="true" onClick={(e) => dispatch(getChatListAction())}>
-                            {
-                                chatsLoading&& <Loader/>
-                            }
-
                             Chats
                         </button>
                         <button className="nav-link" id="nav-contacts-tab" data-bs-toggle="tab"
@@ -69,14 +64,7 @@ const SideBar = () => {
                 <div className="tab-content" id="nav-tabContent">
                     <div className="tab-pane fade show active" id="nav-chats" role="tabpanel"
                          aria-labelledby="nav-chats-tab">
-                        {
-                            groups && (
-                            groups.map(group => (
-                                <div key={group.id}>
-
-                                </div>
-                            )))
-                        }
+                        <Chats/>
                     </div>
                     <div className="tab-pane fade" id="nav-contacts" role="tabpanel"
                          aria-labelledby="nav-contacts-tab">...

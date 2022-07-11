@@ -16,3 +16,11 @@
   border-radius: 50%;
   background: #6b6b6b;
 }
+
+.sidebar-item:hover {
+  background: rgba(256,256,256,0.1);
+}
+
+.item-clicked {
+  background: #676767;
+}
