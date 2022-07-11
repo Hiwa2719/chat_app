@@ -8,7 +8,7 @@ const SideBarItem = ({item, clicked}) => {
 
     }
     return (
-        <div className={`ps-2 pt-2 pb-1 ${clicked === item.id ? "item-clicked": "sidebar-item"}`} onClick={clickHandler()}>
+        <div className={`ps-4 pt-2 pb-1 ${clicked === item.id ? "item-clicked": "sidebar-item"}`} onClick={clickHandler()}>
             <h5 className="text-light">{item.name}</h5>
             <p className="text-info">{messages[messages.length - 1].content}</p>
         </div>

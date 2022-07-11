@@ -24,9 +24,9 @@ const SideBar = () => {
     }, [userInfo])
 
     return (
-        <div className="bg-dark h-100 p-2">
+        <div className="h-100">
             <div>
-                <div className="row my-1 text-secondary text-center align-items-center">
+                <div className="row text-secondary text-center align-items-center py-3">
                     <div className="col p-0 ms-2 ">
                         <div className="hover-light p-2">
                             <i className="fa-solid fa-bars" style={{"fontSize": "1.6rem"}}></i>
