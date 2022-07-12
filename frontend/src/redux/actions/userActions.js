@@ -1,10 +1,13 @@
 import {
     SIGNUP_FAIL,
-    SIGNUP_REQUEST, SIGNUP_RESET,
+    SIGNUP_REQUEST,
+    SIGNUP_RESET,
     UPDATE_USER_PROFILE_FAIL,
     UPDATE_USER_PROFILE_REQUEST,
     UPDATE_USER_PROFILE_RESET,
-    UPDATE_USER_PROFILE_SUCCESS,
+    UPDATE_USER_PROFILE_SUCCESS, USER_CONTACTS_FAIL,
+    USER_CONTACTS_REQUEST,
+    USER_CONTACTS_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_RESET,
@@ -104,7 +107,7 @@ export const updateUserProfileAction = (updateData) => async (dispatch, getState
             }
         }
 
-        const {data} =await axios.post('/chat/update-profile/', updateData, config)
+        const {data} = await axios.post('/chat/update-profile/', updateData, config)
 
         dispatch({
             type: UPDATE_USER_PROFILE_SUCCESS
@@ -118,6 +121,37 @@ export const updateUserProfileAction = (updateData) => async (dispatch, getState
     } catch (e) {
         dispatch({
             type: UPDATE_USER_PROFILE_FAIL,
+            payload: e.response && e.response.data ? e.response.data.errors : e.message
+        })
+    }
+}
+
+
+export const getUserContactsAction = () => async (dispatch, getstate) => {
+    try {
+        dispatch({
+            type: USER_CONTACTS_REQUEST
+        })
+
+        const {userLogin: {userInfo}} = getstate()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.access}`
+            }
+        }
+
+        const {data} = await axios.get(/get-contacts/, config)
+
+        dispatch({
+            type: USER_CONTACTS_SUCCESS,
+            payload: data
+        })
+
+    } catch (e) {
+        dispatch({
+            type: USER_CONTACTS_FAIL,
             payload: e.response && e.response.data ? e.response.data.errors : e.message
         })
     }

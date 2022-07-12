@@ -1,7 +1,12 @@
 import {applyMiddleware, combineReducers, createStore} from "redux";
 import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
-import {signupReducer, updateUserProfileReducer, userLoginReducer} from './redux/reducers/userReducers'
+import {
+    getUserContactsReducer,
+    signupReducer,
+    updateUserProfileReducer,
+    userLoginReducer
+} from './redux/reducers/userReducers'
 import {getChatListReducer, setCurrentChatIdReducer} from "./redux/reducers/chatsReducers";
 
 
@@ -9,6 +14,7 @@ const reducer = combineReducers({
     userLogin: userLoginReducer,
     signup: signupReducer,
     updateProfile: updateUserProfileReducer,
+    userContacts: getUserContactsReducer,
 
     chats: getChatListReducer,
     currentChat: setCurrentChatIdReducer,

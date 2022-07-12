@@ -5,7 +5,7 @@ import {
     UPDATE_USER_PROFILE_FAIL,
     UPDATE_USER_PROFILE_REQUEST,
     UPDATE_USER_PROFILE_RESET,
-    UPDATE_USER_PROFILE_SUCCESS,
+    UPDATE_USER_PROFILE_SUCCESS, USER_CONTACTS_FAIL, USER_CONTACTS_REQUEST, USER_CONTACTS_RESET, USER_CONTACTS_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_RESET,
@@ -53,6 +53,22 @@ export const updateUserProfileReducer = (state = {}, action) => {
         case UPDATE_USER_PROFILE_FAIL:
             return {loading: false, error: action.payload}
         case UPDATE_USER_PROFILE_RESET:
+            return {}
+        default:
+            return state
+    }
+}
+
+
+export const getUserContactsReducer = (state = {}, action) => {
+    switch (action.type) {
+        case USER_CONTACTS_REQUEST:
+            return {loading: true}
+        case USER_CONTACTS_SUCCESS:
+            return {loading: false, contacts: action.payload}
+        case USER_CONTACTS_FAIL:
+            return {loading: false, error: action.payload}
+        case USER_CONTACTS_RESET:
             return {}
         default:
             return state
