@@ -1,6 +1,6 @@
 import {
     SIGNUP_FAIL,
-    SIGNUP_REQUEST,
+    SIGNUP_REQUEST, SIGNUP_RESET,
     UPDATE_USER_PROFILE_FAIL,
     UPDATE_USER_PROFILE_REQUEST,
     UPDATE_USER_PROFILE_RESET,
@@ -11,7 +11,7 @@ import {
     USER_LOGIN_SUCCESS
 } from "../constants/userConstants";
 import axios from "axios";
-import {CHATS_LIST_RESET} from "../constants/chatConstants";
+import {CHATS_LIST_RESET, RESET_CURRENT_CHAT_ID} from "../constants/chatConstants";
 
 
 export const userLoginAction = (userInfo) => async (dispatch) => {
@@ -84,6 +84,8 @@ export const logoutAction = () => async (dispatch) => {
     })
 
     dispatch({type: UPDATE_USER_PROFILE_RESET})
+    dispatch({type: RESET_CURRENT_CHAT_ID})
+    dispatch({type: SIGNUP_RESET})
 }
 
 

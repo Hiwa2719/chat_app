@@ -47,7 +47,7 @@ const Profile = () => {
         <div className="p-5 mx-5 text-light">
             {
                 updateSuccess && (<Alert alertType="success">
-                    Your profile is not update
+                    Your profile is now update
                 </Alert>)
             }
 
