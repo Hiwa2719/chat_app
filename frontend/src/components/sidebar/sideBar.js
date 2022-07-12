@@ -2,15 +2,18 @@ import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
 import {getChatListAction} from "../../redux/actions/chatsActions";
-import {logoutAction} from '../../redux/actions/userActions'
+import {logoutAction, getUserContactsAction} from '../../redux/actions/userActions'
 import Profile from "./profile";
 import Chats from "./chats";
+import Loader from "../loader";
+import Alert from "../alert";
 
 
 const SideBar = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const {userInfo} = useSelector(state => state.userLogin)
+    const {loading: contactsLoading, error: contactsError} = useSelector(state => state.userContacts)
 
     const lockHandler = (e) => {
         dispatch(logoutAction())
@@ -53,7 +56,9 @@ const SideBar = () => {
                         </button>
                         <button className="nav-link" id="nav-contacts-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-contacts" type="button" role="tab" aria-controls="nav-contacts"
-                                aria-selected="false">Contacts
+                                aria-selected="false" onClick={() => dispatch(getUserContactsAction())}>
+                            {contactsLoading && <Loader/>}
+                            Contacts
                         </button>
                         <button className="nav-link" id="nav-profile-tab" data-bs-toggle="tab"
                                 data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile"
@@ -67,7 +72,10 @@ const SideBar = () => {
                         <Chats/>
                     </div>
                     <div className="tab-pane fade" id="nav-contacts" role="tabpanel"
-                         aria-labelledby="nav-contacts-tab">...
+                         aria-labelledby="nav-contacts-tab">
+                        {
+                            contactsError && <Alert alertType="danger">{contactsError}</Alert>
+                        }
                     </div>
                     <div className="tab-pane fade" id="nav-profile" role="tabpanel"
                          aria-labelledby="nav-profile-tab">

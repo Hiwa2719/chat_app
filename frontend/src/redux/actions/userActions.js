@@ -142,7 +142,7 @@ export const getUserContactsAction = () => async (dispatch, getstate) => {
             }
         }
 
-        const {data} = await axios.get(/get-contacts/, config)
+        const {data} = await axios.get('/chat/get-contacts/', config)
 
         dispatch({
             type: USER_CONTACTS_SUCCESS,
@@ -152,7 +152,7 @@ export const getUserContactsAction = () => async (dispatch, getstate) => {
     } catch (e) {
         dispatch({
             type: USER_CONTACTS_FAIL,
-            payload: e.response && e.response.data ? e.response.data.errors : e.message
+            payload: e.response && e.response.data.errors ? e.response.data.errors : e.message
         })
     }
 }

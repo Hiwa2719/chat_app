@@ -11,5 +11,6 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('update-profile/', views.update_profile, name='update-profile'),
     path('chats/', views.user_chats, name='user-chats'),
+    path('get-contacts/', views.get_contacts, name='get-contacts'),
     path('<str:room_name>/', views.room, name='room'),
 ]

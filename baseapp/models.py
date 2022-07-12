@@ -18,7 +18,7 @@ class Message(models.Model):
 
 
 class Person(User):
-    contacts = models.ManyToManyField('self', blank=True)
+    contacts = models.ManyToManyField(User, related_name='+', blank=True)
 
     class Meta(User.Meta):
         verbose_name = _("person")
