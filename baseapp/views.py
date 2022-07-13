@@ -67,6 +67,5 @@ def user_chats(request):
 def get_contacts(request):
     person = request.user.person
     contacts = person.contacts.all()
-    print(contacts)
     serializer = UserSerializerWithoutToken(contacts, many=True)
     return Response(serializer.data)
