@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {useSelector} from "react-redux";
 import Loader from "../loader";
 import Alert from "../alert";
+import ContactDetailModal from "./contactDetailModal";
 
 
 const Contacts = () => {
@@ -23,12 +24,15 @@ const Contacts = () => {
                 contacts &&
                 contacts.map(contact => (
                     <div key={contact.id}
-                         className={`ps-3 py-3 ${selectedContact === contact.id ? "item-clicked" : "sidebar-item"}`}
-                         onClick={() => setSelectedContact(contact.id)}>
+                         className={`ps-3 py-3 ${selectedContact.id === contact.id ? "item-clicked" : "sidebar-item"}`}
+                         onClick={() => setSelectedContact(contact)}>
                         <h5>@{contact.username}</h5>
                         <div>{contact.first_name} {contact.last_name}</div>
                     </div>
                 ))
+            }
+            {
+                selectedContact && <ContactDetailModal setSelectedContact={setSelectedContact} contact={selectedContact}/>
             }
         </div>
     )
