@@ -1,11 +1,18 @@
 import {
+    REMOVE_CONTACT_FAIL,
+    REMOVE_CONTACT_REQUEST,
+    REMOVE_CONTACT_SUCCESS,
     SIGNUP_FAIL,
     SIGNUP_REQUEST,
     SIGNUP_RESET,
     UPDATE_USER_PROFILE_FAIL,
     UPDATE_USER_PROFILE_REQUEST,
     UPDATE_USER_PROFILE_RESET,
-    UPDATE_USER_PROFILE_SUCCESS, USER_CONTACTS_FAIL, USER_CONTACTS_REQUEST, USER_CONTACTS_RESET, USER_CONTACTS_SUCCESS,
+    UPDATE_USER_PROFILE_SUCCESS,
+    USER_CONTACTS_FAIL,
+    USER_CONTACTS_REQUEST,
+    USER_CONTACTS_RESET,
+    USER_CONTACTS_SUCCESS,
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_RESET,
@@ -70,6 +77,20 @@ export const getUserContactsReducer = (state = {}, action) => {
             return {loading: false, error: action.payload}
         case USER_CONTACTS_RESET:
             return {}
+        default:
+            return state
+    }
+}
+
+
+export const removeContactReducer = (state = {}, action) => {
+    switch (action.type) {
+        case REMOVE_CONTACT_REQUEST:
+            return {loading: true}
+        case REMOVE_CONTACT_SUCCESS:
+            return {loading: false, success: true}
+        case REMOVE_CONTACT_FAIL:
+            return {loading: false, error: action.payload}
         default:
             return state
     }

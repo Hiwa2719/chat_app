@@ -1,11 +1,15 @@
 import {
+    REMOVE_CONTACT_FAIL,
+    REMOVE_CONTACT_REQUEST,
+    REMOVE_CONTACT_SUCCESS,
     SIGNUP_FAIL,
     SIGNUP_REQUEST,
     SIGNUP_RESET,
     UPDATE_USER_PROFILE_FAIL,
     UPDATE_USER_PROFILE_REQUEST,
     UPDATE_USER_PROFILE_RESET,
-    UPDATE_USER_PROFILE_SUCCESS, USER_CONTACTS_FAIL,
+    UPDATE_USER_PROFILE_SUCCESS,
+    USER_CONTACTS_FAIL,
     USER_CONTACTS_REQUEST,
     USER_CONTACTS_SUCCESS,
     USER_LOGIN_FAIL,
@@ -156,3 +160,38 @@ export const getUserContactsAction = () => async (dispatch, getstate) => {
         })
     }
 }
+
+
+export const removeContactAction = (contact) => async (dispatch, getstate) => {
+    try {
+        dispatch({
+            type: REMOVE_CONTACT_REQUEST
+        })
+
+        const {userLogin: {userInfo}} = getstate()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.access}`
+            }
+        }
+
+        const {data} = await axios.post('/chat/remove-contact/', contact, config)
+
+        dispatch({type: REMOVE_CONTACT_SUCCESS})
+
+        dispatch({
+            type: USER_CONTACTS_SUCCESS,
+            payload: data
+        })
+
+    } catch (e) {
+        dispatch({
+            type: REMOVE_CONTACT_FAIL,
+            payload: e.response && e.response.data.errors ? e.response.data.errors : e.message
+        })
+    }
+}
+
+

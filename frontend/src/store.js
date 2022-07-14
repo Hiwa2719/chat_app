@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {
     getUserContactsReducer,
+    removeContactReducer,
     signupReducer,
     updateUserProfileReducer,
     userLoginReducer
@@ -15,6 +16,7 @@ const reducer = combineReducers({
     signup: signupReducer,
     updateProfile: updateUserProfileReducer,
     userContacts: getUserContactsReducer,
+    removeContact: removeContactReducer,
 
     chats: getChatListReducer,
     currentChat: setCurrentChatIdReducer,
@@ -23,7 +25,6 @@ const reducer = combineReducers({
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ?
     JSON.parse(localStorage.getItem('userInfo')) : null
-
 
 
 const initialState = {
