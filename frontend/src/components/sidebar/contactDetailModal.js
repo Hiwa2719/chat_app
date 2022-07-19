@@ -1,10 +1,18 @@
 import React from "react";
 import '../../App.css'
+import {useDispatch} from "react-redux";
+import {removeContactAction} from "../../redux/actions/userActions";
 
 
 const ContactDetailModal = ({contact, setSelectedContact}) => {
     const closeHandler = () => {
         setSelectedContact('')
+    }
+
+    const dispatch = useDispatch()
+    const removingHandler = (e) => {
+        dispatch(removeContactAction({id: contact.id}))
+        closeHandler()
     }
 
     return (
@@ -20,7 +28,9 @@ const ContactDetailModal = ({contact, setSelectedContact}) => {
                     <div className="mt-3">First name: {contact.first_name}</div>
                     <div>Last name: {contact.last_name}</div>
                     <div className="mt-3">
-                        <button className="btn btn-danger">Remove from contacts</button>
+                        <button className="btn btn-danger" onClick={removingHandler}>
+                            Remove from contacts
+                        </button>
                         <button className="btn btn-warning ms-3">Message</button>
                     </div>
                 </div>

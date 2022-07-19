@@ -193,5 +193,3 @@ export const removeContactAction = (contact) => async (dispatch, getstate) => {
         })
     }
 }
-
-

@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -69,3 +69,15 @@ def get_contacts(request):
     contacts = person.contacts.all()
     serializer = UserSerializerWithoutToken(contacts, many=True)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def remove_contact(request):
+    try:
+        contact = User.objects.get(id=request.data.get('id'))
+    except User.DoesNotExist:
+        return Response('this contact does not exists', status=status.HTTP_400_BAD_REQUEST)
+    person = request.user.person
+    person.contacts.remove(contact)
+    return redirect(reverse('baseapp:get-contacts'))
