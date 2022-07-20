@@ -59,15 +59,15 @@ def update_profile(request):
 @api_view()
 @permission_classes([IsAuthenticated])
 def user_chats(request):
-    key = f'{request.user.username}_chats'
+    user = request.user
+    key = f'{user.username}_chats'
     if redis_client.exists(key):
         string_chats = redis_client.get(key)
-        chats_queryset = json.loads(string_chats)
+        chats = json.loads(string_chats)
     else:
-        chats_queryset = request.user.chat_set.all()
+        chats_queryset = user.chat_set.all()
         chats = ChatSerializer(chats_queryset, many=True).data
-        if chats:
-            redis_client.set(key, json.dumps(chats))
+        redis_client.set(key, json.dumps(chats))
     return Response(chats)
 
 
@@ -77,11 +77,9 @@ def get_contacts(request):
     key = f'{request.user.username}_contacts'
 
     if redis_client.exists(key):
-        print('hitting redis')
         string_contacts = redis_client.get(key)
         contacts = json.loads(string_contacts)
     else:
-        print('hitting DB')
         person = request.user.person
         contacts_queryset = person.contacts.all()
         serializer = UserSerializerWithoutToken(contacts_queryset, many=True)
@@ -103,7 +101,6 @@ def remove_contact(request):
     key = f'{request.user.username}_contacts'
 
     if redis_client.exists(key):
-        print('removing from redis')
         string_contacts = redis_client.get(key)
         contacts = json.loads(string_contacts)
         new_contacts = [contact for contact in contacts if contact['id'] != contact_id]
