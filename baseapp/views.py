@@ -1,4 +1,5 @@
-import redis, json
+import json
+import redis
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect, reverse
 from rest_framework import status
@@ -7,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from .models import Chat
 from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer, UserSerializer, ChatSerializer, \
     UserSerializerWithoutToken
 
@@ -107,3 +109,14 @@ def remove_contact(request):
         redis_client.set(key, json.dumps(new_contacts))
         return Response(new_contacts)
     return redirect(reverse('baseapp:get-contacts'))
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def start_chat(request):
+    user = request.user
+    chat, created = Chat.objects.get_chat(request)
+    if created:
+        redis_client.delete(f'{user.username}_chats')
+        return redirect(reverse('baseapp:user-chats'))
+    return Response()

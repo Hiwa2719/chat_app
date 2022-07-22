@@ -28,9 +28,26 @@ class Person(User):
         return self.username
 
 
+class ChatManager(models.Manager):
+    def get_chat(self, request):
+        created = False
+        user = request.user
+        contact_id = request.data.get('id')
+        contact = User.objects.get(contact_id)
+        chat = self.get_queryset().filter(members=user).filter(memebers__id=contact_id)
+        if not chat:
+            chat = Chat.objects.create(name=f'{user.username}_{contact.username}_chat')
+            chat.members.set(user, contact)
+            chat.save()
+            created = True
+        return chat, created
+
+
 class Chat(models.Model):
     name = models.CharField(max_length=256)
     members = models.ManyToManyField(User)
+
+    objects = ChatManager()
 
     def __str__(self):
         return self.name

@@ -8,7 +8,6 @@ from .models import Message, Person, Chat
 User = get_user_model()
 
 admin.site.register(Message)
-admin.site.register(Chat)
 
 
 @admin.register(Person)
@@ -37,3 +36,8 @@ class PersonModelAdmin(UserAdmin):
         if db_field.name == "contacts":
             kwargs["queryset"] = User.objects.exclude(username=request.user.username)
         return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
+@admin.register(Chat)
+class ChatModelAdmin(admin.ModelAdmin):
+    filter_horizontal = 'members',
