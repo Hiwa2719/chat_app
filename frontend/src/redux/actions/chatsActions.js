@@ -1,9 +1,15 @@
-import {CHATS_LIST_FAIL, CHATS_LIST_REQUEST, CHATS_LIST_SUCCESS} from "../constants/chatConstants";
+import {
+    CHATS_LIST_FAIL,
+    CHATS_LIST_REQUEST,
+    CHATS_LIST_SUCCESS,
+    START_CHAT_FAIL,
+    START_CHAT_REQUEST, START_CHAT_SUCCESS
+} from "../constants/chatConstants";
 import axios from "axios";
 
 
 export const getChatListAction = () => async (dispatch, getState) => {
-    try{
+    try {
         dispatch({
             type: CHATS_LIST_REQUEST
         })
@@ -24,10 +30,48 @@ export const getChatListAction = () => async (dispatch, getState) => {
             payload: data
         })
 
-    }catch (e) {
+    } catch (e) {
         console.log(e)
         dispatch({
             type: CHATS_LIST_FAIL,
+            payload: e.response
+        })
+    }
+}
+
+
+export const startChatAction = (contactId) => async (dispatch, getState) => {
+    try {
+        dispatch({
+            type: START_CHAT_REQUEST
+        })
+
+        const {userLogin: {userInfo}} = getState()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.access}`
+            }
+        }
+
+        const {data} = await axios.post('/chat/chats/', {id: contactId}, config)
+
+        dispatch({
+            type: START_CHAT_SUCCESS
+        })
+
+        if (data) {
+            dispatch({
+                type: CHATS_LIST_SUCCESS,
+                payload: data
+            })
+        }
+
+
+    } catch (e) {
+        dispatch({
+            type: START_CHAT_FAIL,
             payload: e.response
         })
     }

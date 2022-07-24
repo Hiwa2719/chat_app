@@ -15,6 +15,10 @@ const ContactDetailModal = ({contact, setSelectedContact}) => {
         closeHandler()
     }
 
+    const messageHandler = () => {
+
+    }
+
     return (
         <div className="modal-prop" onClick={() => setSelectedContact('')}>
             <div className="modal-content w-25 p-3" onClick={(e) => e.stopPropagation()}>
@@ -31,7 +35,7 @@ const ContactDetailModal = ({contact, setSelectedContact}) => {
                         <button className="btn btn-danger" onClick={removingHandler}>
                             Remove from contacts
                         </button>
-                        <button className="btn btn-warning ms-3">Message</button>
+                        <button className="btn btn-warning ms-3" onClick={messageHandler}>Message</button>
                     </div>
                 </div>
             </div>

@@ -111,7 +111,7 @@ def remove_contact(request):
     return redirect(reverse('baseapp:get-contacts'))
 
 
-@api_view()
+@api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def start_chat(request):
     user = request.user

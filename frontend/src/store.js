@@ -8,7 +8,7 @@ import {
     updateUserProfileReducer,
     userLoginReducer
 } from './redux/reducers/userReducers'
-import {getChatListReducer, setCurrentChatIdReducer} from "./redux/reducers/chatsReducers";
+import {getChatListReducer, setCurrentChatIdReducer, startChatReducer} from "./redux/reducers/chatsReducers";
 
 
 const reducer = combineReducers({
@@ -20,6 +20,7 @@ const reducer = combineReducers({
 
     chats: getChatListReducer,
     currentChat: setCurrentChatIdReducer,
+    startChat: startChatReducer,
 })
 
 
