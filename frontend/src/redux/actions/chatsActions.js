@@ -2,8 +2,10 @@ import {
     CHATS_LIST_FAIL,
     CHATS_LIST_REQUEST,
     CHATS_LIST_SUCCESS,
+    SET_CURRENT_CHAT_ID,
     START_CHAT_FAIL,
-    START_CHAT_REQUEST, START_CHAT_SUCCESS
+    START_CHAT_REQUEST,
+    START_CHAT_SUCCESS
 } from "../constants/chatConstants";
 import axios from "axios";
 
@@ -55,17 +57,19 @@ export const startChatAction = (contactId) => async (dispatch, getState) => {
             }
         }
 
-        const {data} = await axios.post('/chat/chats/', {id: contactId}, config)
+        const {data} = await axios.post('/chat/start-chat/', {id: contactId}, config)
 
         dispatch({
             type: START_CHAT_SUCCESS
         })
 
-        if (data) {
-            dispatch({
-                type: CHATS_LIST_SUCCESS,
-                payload: data
-            })
+        dispatch({
+            type: SET_CURRENT_CHAT_ID,
+            payload: data.chat_id
+        })
+
+        if (data.created) {
+            dispatch(getChatListAction())
         }
 
 

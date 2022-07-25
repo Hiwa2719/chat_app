@@ -118,5 +118,4 @@ def start_chat(request):
     chat, created = Chat.objects.get_chat(request)
     if created:
         redis_client.delete(f'{user.username}_chats')
-        return redirect(reverse('baseapp:user-chats'))
-    return Response()
+    return Response({'chat_id': chat.id, 'created': created})

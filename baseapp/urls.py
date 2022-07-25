@@ -13,5 +13,6 @@ urlpatterns = [
     path('chats/', views.user_chats, name='user-chats'),
     path('get-contacts/', views.get_contacts, name='get-contacts'),
     path('remove-contact/', views.remove_contact, name='remove-contact'),
+    path('start-chat/',views.start_chat, name='start-chat'),
     path('<str:room_name>/', views.room, name='room'),
 ]

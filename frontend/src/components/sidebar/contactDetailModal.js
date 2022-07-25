@@ -1,7 +1,9 @@
 import React from "react";
 import '../../App.css'
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {removeContactAction} from "../../redux/actions/userActions";
+import Loader from "../loader";
+import {startChatAction} from "../../redux/actions/chatsActions";
 
 
 const ContactDetailModal = ({contact, setSelectedContact}) => {
@@ -10,13 +12,16 @@ const ContactDetailModal = ({contact, setSelectedContact}) => {
     }
 
     const dispatch = useDispatch()
+    const {loading: startChatLoading} = useSelector(state => state.startChat)
+
     const removingHandler = (e) => {
         dispatch(removeContactAction({id: contact.id}))
         closeHandler()
     }
 
     const messageHandler = () => {
-
+        dispatch(startChatAction(contact.id))
+        closeHandler()
     }
 
     return (
@@ -35,7 +40,10 @@ const ContactDetailModal = ({contact, setSelectedContact}) => {
                         <button className="btn btn-danger" onClick={removingHandler}>
                             Remove from contacts
                         </button>
-                        <button className="btn btn-warning ms-3" onClick={messageHandler}>Message</button>
+                        <button className="btn btn-warning ms-3" onClick={messageHandler}>
+                            {startChatLoading && <Loader/>}
+                            Message
+                        </button>
                     </div>
                 </div>
             </div>

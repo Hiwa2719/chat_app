@@ -33,11 +33,11 @@ class ChatManager(models.Manager):
         created = False
         user = request.user
         contact_id = request.data.get('id')
-        contact = User.objects.get(contact_id)
-        chat = self.get_queryset().filter(members=user).filter(memebers__id=contact_id)
+        contact = User.objects.get(id=contact_id)
+        chat = self.get_queryset().filter(members=user).filter(members__id=contact_id).first()
         if not chat:
             chat = Chat.objects.create(name=f'{user.username}_{contact.username}_chat')
-            chat.members.set(user, contact)
+            chat.members.set([user, contact])
             chat.save()
             created = True
         return chat, created
