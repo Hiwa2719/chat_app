@@ -62,9 +62,14 @@ class UserCreationSerializer(serializers.Serializer):
 
 
 class MessageSerializer(serializers.ModelSerializer):
+    author = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
-        exclude = 'chat',
+        fields = 'id', 'author', 'content', 'timestamp'
+
+    def get_author(self, obj):
+        return obj.author.username
 
 
 class ChatSerializer(serializers.ModelSerializer):
@@ -75,6 +80,6 @@ class ChatSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_messages(self, obj):
-        messages = obj.message_set.order_by('-timestamp')[:10]
+        messages = obj.message_set.order_by('timestamp')[:10]
         serializer = MessageSerializer(messages, many=True)
         return serializer.data

@@ -12,11 +12,13 @@ const MessageSide = () => {
     useEffect(() => {
         if (chats && currentChatId) {
             const chat = chats.find(chat => chat.id === currentChatId)
-            setMessages(chat.messages)
+            if (chat) {
+                setMessages(chat.messages)
+            }
         }
     }, [currentChatId, chats])
 
-        const newDateFormat = (date) => {
+    const newDateFormat = (date) => {
         let dateObj = moment(date)
         return moment.utc(dateObj).local().format("YYYY-MM-DD HH:mm:ss");
     }
@@ -27,7 +29,8 @@ const MessageSide = () => {
                 {
                     messages && (
                         messages.map(message => (
-                            <div key={message.id} className={`w-25 rounded-1 m-3 p-3 ${message.author === userInfo.username ? "bg-warning" : "bg-info"}`}>
+                            <div key={message.id}
+                                 className={`w-25 rounded-1 m-3 p-3 ${message.author === userInfo.username ? "bg-warning" : "bg-info  ms-auto"}`}>
                                 <p>{message.content}</p>
                                 <div className="small text-end">{newDateFormat(message.timestamp)}</div>
                             </div>
