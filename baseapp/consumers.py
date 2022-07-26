@@ -1,8 +1,11 @@
 import json
 
+import rest_framework_simplejwt.exceptions
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import InvalidToken
 
 from .models import Message
 
@@ -12,7 +15,7 @@ User = get_user_model()
 class ChatConsumer(WebsocketConsumer):
 
     def get_messages(self, data):
-        messages = Message.last_10_messages()
+        messages = Message.objects.all()[:10]
         content = {
             'messages': self.messages_to_json(messages)
         }
@@ -50,6 +53,13 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
+
+        try:
+            token = self.scope['query_string'].decode()[6:]
+            validated_token = JWTAuthentication().get_validated_token(token)
+            user = JWTAuthentication().get_user(validated_token)
+        except InvalidToken:
+            return
 
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
