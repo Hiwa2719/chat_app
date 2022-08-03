@@ -1,20 +1,18 @@
-import json
-
 from asgiref.sync import async_to_sync
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import JsonWebsocketConsumer
 from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework_simplejwt.exceptions import InvalidToken
 
-from .models import Message
+from .models import Message, Chat
+from .serializers import MessageSerializer
 
 User = get_user_model()
 
 
-class ChatConsumer(WebsocketConsumer):
+class ChatConsumer(JsonWebsocketConsumer):
 
-    def get_messages(self, data):
-        messages = Message.objects.all()[:10]
+    def get_messages(self, content, chat):
+
+        messages = chat.message_set.all().order_by('-timestamp')[:10]
         content = {
             'messages': self.messages_to_json(messages)
         }
@@ -24,23 +22,23 @@ class ChatConsumer(WebsocketConsumer):
         return [self.message_to_json(msg) for msg in messages]
 
     def message_to_json(self, message):
-        return {
-            'author': message.author.username,
-            'content': message.content,
-            'timestamp': message.timestamp
-        }
+        return MessageSerializer(message).data
 
-    def new_message(self, data):
-        username = data.get('username')
-        user = User.objects.get(username=username)
+    def new_message(self, content, chat):
         message = Message.objects.create(
-            author=user,
-            content=data['message']
+            author=self.user,
+            content=content['message'],
+            chat=chat
         )
-        return self.send_chat_message(
+        #  send message to group
+        async_to_sync(self.channel_layer.group_send)(
+            chat.name,
             {
-                'command': 'new_message',
-                'message': self.message_to_json(message)
+                'type': 'chat.message',
+                'message': {
+                    'command': 'new_message',
+                    'message': self.message_to_json(message)
+                }
             }
         )
 
@@ -52,7 +50,9 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         # Join room group
         self.user = self.scope['user']
-        for chat in self.user.chat_set.all():
+        self.chats = self.user.chat_set.all()
+
+        for chat in self.chats:
             async_to_sync(self.channel_layer.group_add)(
                 chat.name,
                 self.channel_name
@@ -63,37 +63,18 @@ class ChatConsumer(WebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         if hasattr(self, 'user'):
-            for chat in self.user.chat_set.all():
+            for chat in self.chats:
                 async_to_sync(self.channel_layer.group_discard)(
                     chat.name,
                     self.channel_name
                 )
 
     # Receive message from WebSocket
-    def receive(self, text_data):
-        data = json.loads(text_data)
-        message = data['message']
-        print(dir(self.channel_layer))
-        print(dir(self.channel_layer.valid_group_name))
-        print(self.channel_layer.valid_group_name)
-        # self.COMMANDS[data['command']](self, data)
-
-    def send_chat_message(self, message):
-        # Send message to room group
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'chat_message',
-                'message': message
-            }
-        )
+    def receive_json(self, content, **kwargs):
+        chat = Chat.objects.get(id=content['chat'])
+        # todo update self.chats command
+        if chat in self.chats:
+            self.COMMANDS[content['command']](self, content, chat)
 
     def send_message(self, message):
-        self.send(text_data=json.dumps(message))
-
-    def chat_message(self, event):
-        message = event['message']
-
-        # Send message to WebSocket
-        self.send(text_data=json.dumps(message))
-
+        self.send_json(message)
