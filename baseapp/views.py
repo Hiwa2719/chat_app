@@ -64,12 +64,27 @@ def user_chats(request):
     user = request.user
     key = f'{user.username}_chats'
     if redis_client.exists(key):
-        string_chats = redis_client.get(key)
-        chats = json.loads(string_chats)
+        redis_dict = redis_client.hgetall(key)
+        chats = list()
+        for chat in redis_dict.values():
+            chat = json.loads(chat)
+            messages = redis_client.hgetall(f'{chat["name"]}_messages')
+            messages = {key.decode(): json.loads(value) for key, value in messages.items()}
+            chat['messages'] = messages
+            chats.append(
+                chat
+            )
     else:
         chats_queryset = user.chat_set.all()
         chats = ChatSerializer(chats_queryset, many=True).data
-        redis_client.set(key, json.dumps(chats))
+        for chat in chats:
+            messages = chat['messages']
+            messages_key = f'{chat["name"]}_messages'
+            for message in messages:
+                redis_client.hset(messages_key, message['id'], json.dumps(message))
+            modified_chat = dict(chat)
+            del modified_chat['messages']
+            redis_client.hset(key, chat['id'], json.dumps(modified_chat))
     return Response(chats)
 
 

@@ -1,3 +1,5 @@
+import redis
+import json
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.contrib.auth import get_user_model
@@ -6,6 +8,7 @@ from .models import Message, Chat
 from .serializers import MessageSerializer
 
 User = get_user_model()
+redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 class ChatConsumer(JsonWebsocketConsumer):
@@ -30,14 +33,18 @@ class ChatConsumer(JsonWebsocketConsumer):
             content=content['message'],
             chat=chat
         )
+
+        serialized_message = self.message_to_json(message)
+        redis_client.hset(f'{chat.name}_messages', message.id, json.dumps(serialized_message))
+
         #  send message to group
         async_to_sync(self.channel_layer.group_send)(
             chat.name,
             {
-                'type': 'chat.message',
+                'type': 'send.message',
                 'message': {
                     'command': 'new_message',
-                    'message': self.message_to_json(message)
+                    'message': serialized_message,
                 }
             }
         )
@@ -57,7 +64,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 chat.name,
                 self.channel_name
             )
-
+        print('connecting')
         self.accept()
 
     def disconnect(self, close_code):
@@ -77,4 +84,5 @@ class ChatConsumer(JsonWebsocketConsumer):
             self.COMMANDS[content['command']](self, content, chat)
 
     def send_message(self, message):
+        print(message)
         self.send_json(message)
