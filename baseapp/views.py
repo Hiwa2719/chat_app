@@ -70,16 +70,17 @@ def user_chats(request):
         for chat in redis_dict.values():
             chat = json.loads(chat)
             messages = redis_client.hgetall(f'{chat["name"]}_messages')
-            messages = dict(sorted(messages.items(), key=lambda x: x[1]))
             msg = list()
             for key, value in messages.items():
                 msg.append(
                     json.loads(value)
                 )
+            # msg = sorted(msg, key=lambda x: x['id'])
             chat['messages'] = msg
             chats.append(
                 chat
             )
+        # chats = sorted(chats, key=lambda x: x['update'], reverse=True)
     else:
         chats_queryset = user.chat_set.all()
         chats = ChatSerializer(chats_queryset, many=True).data

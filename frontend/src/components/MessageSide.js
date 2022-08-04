@@ -9,7 +9,7 @@ const MessageSide = () => {
     const {id: currentChatId} = useSelector(state => state.currentChat)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
-    const [chatSocket, setChatSocket] = useState({})
+    const [chatSocket, setChatSocket] = useState(false)
 
 
     useEffect(() => {
@@ -55,18 +55,24 @@ const MessageSide = () => {
         }
     }
 
-    chatSocket.onmessage = function (e) {
-        const data = JSON.parse(e.data);
-        console.log(data)
-        // updateChatReducer(chat, data)
-    };
+    if (chatSocket) {
+        chatSocket.onmessage = function (e) {
+            const data = JSON.parse(e.data);
+            console.log('chating')
+            console.log(data)
+
+            // updateChatReducer(chat, data)
+        };
+    }
 
     return (
         <div className="message-side w-100 h-100">
             <div className="h-100 pb-5 pt-3">
                 {
                     messages && (
-                        messages.map(message => (
+                        messages
+                            .sort(function (x){return x['timestamp']})
+                            .map(message => (
                             <div key={message.id}
                                  className={`w-25 rounded-1 m-3 p-3 ${message.author === userInfo.username ? "bg-warning" : "bg-info  ms-auto"}`}>
                                 <p>{message.content}</p>

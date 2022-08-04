@@ -26,7 +26,9 @@ const Chats = () => {
 
             {
                 chats && (
-                    chats.map(chat => chat.messages.length >= 1 && (
+                    chats
+                        .sort(function (x){return x['update']}).reverse()
+                        .map(chat => chat.messages.length >= 1 && (
                         <div key={chat.id} onClick={e => clickHandler(chat.id)}>
                             <SideBarItem item={chat}/>
                         </div>
