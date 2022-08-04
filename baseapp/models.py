@@ -1,6 +1,8 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
@@ -46,6 +48,7 @@ class ChatManager(models.Manager):
 class Chat(models.Model):
     name = models.CharField(max_length=256)
     members = models.ManyToManyField(User)
+    update = models.DateTimeField(blank=True)
 
     objects = ChatManager()
 
@@ -59,3 +62,20 @@ def person_creation_receiver(sender, instance, created, *args, **kwargs):
         person = Person()
         person.user_ptr = instance
         person.save()
+
+
+@receiver(post_save, sender=Message)
+def post_save_chat_update(instance, created, **kwargs):
+    if created:
+        chat = instance.chat
+        chat.update = datetime.now()
+        chat.save()
+
+
+@receiver(pre_delete, sender=Message)
+def pre_delete_chat_update(instance, **kwargs):
+    chat = instance.chat
+    messages = chat.message_set.order_by('timestamp')
+    if instance.id == messages.last().id:
+        chat.update = datetime.now()
+        chat.save()

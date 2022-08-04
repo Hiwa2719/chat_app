@@ -9,7 +9,7 @@ const MessageSide = () => {
     const {id: currentChatId} = useSelector(state => state.currentChat)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
-    const [chatSocket, setChatSocket] = useState(false)
+    const [chatSocket, setChatSocket] = useState({})
 
 
     useEffect(() => {
@@ -53,13 +53,13 @@ const MessageSide = () => {
                 chat: currentChatId,
             }));
         }
-
     }
 
-    // chatSocket.onmessage = function (e) {
-    //     const data = JSON.parse(e.data);
-    //     console.log('message')
-    // };
+    chatSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        console.log(data)
+        // updateChatReducer(chat, data)
+    };
 
     return (
         <div className="message-side w-100 h-100">

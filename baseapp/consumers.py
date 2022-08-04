@@ -64,7 +64,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 chat.name,
                 self.channel_name
             )
-        print('connecting')
+
         self.accept()
 
     def disconnect(self, close_code):
@@ -84,5 +84,4 @@ class ChatConsumer(JsonWebsocketConsumer):
             self.COMMANDS[content['command']](self, content, chat)
 
     def send_message(self, message):
-        print(message)
         self.send_json(message)

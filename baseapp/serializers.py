@@ -80,6 +80,9 @@ class ChatSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def get_messages(self, obj):
-        messages = obj.message_set.order_by('timestamp')[:10]
+        messages = obj.message_set.all().order_by('timestamp')
+        count = messages.count()
+        if count > 10:
+            messages = messages[count-10:]
         serializer = MessageSerializer(messages, many=True)
         return serializer.data

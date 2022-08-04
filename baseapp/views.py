@@ -1,4 +1,5 @@
 import json
+
 import redis
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect, reverse
@@ -69,8 +70,13 @@ def user_chats(request):
         for chat in redis_dict.values():
             chat = json.loads(chat)
             messages = redis_client.hgetall(f'{chat["name"]}_messages')
-            messages = {key.decode(): json.loads(value) for key, value in messages.items()}
-            chat['messages'] = messages
+            messages = dict(sorted(messages.items(), key=lambda x: x[1]))
+            msg = list()
+            for key, value in messages.items():
+                msg.append(
+                    json.loads(value)
+                )
+            chat['messages'] = msg
             chats.append(
                 chat
             )
@@ -85,6 +91,7 @@ def user_chats(request):
             modified_chat = dict(chat)
             del modified_chat['messages']
             redis_client.hset(key, chat['id'], json.dumps(modified_chat))
+
     return Response(chats)
 
 
