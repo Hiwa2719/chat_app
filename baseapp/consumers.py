@@ -44,6 +44,7 @@ class ChatConsumer(JsonWebsocketConsumer):
                 'type': 'send.message',
                 'message': {
                     'command': 'new_message',
+                    'chat': chat.id,
                     'message': serialized_message,
                 }
             }
@@ -83,5 +84,6 @@ class ChatConsumer(JsonWebsocketConsumer):
         if chat in self.chats:
             self.COMMANDS[content['command']](self, content, chat)
 
-    def send_message(self, message):
+    def send_message(self, event):
+        message = event['message']
         self.send_json(message)

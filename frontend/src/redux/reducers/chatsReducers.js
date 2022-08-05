@@ -3,7 +3,7 @@ import {
     CHATS_LIST_REQUEST,
     CHATS_LIST_RESET,
     CHATS_LIST_SUCCESS, RESET_CURRENT_CHAT_ID,
-    SET_CURRENT_CHAT_ID, START_CHAT_FAIL, START_CHAT_REQUEST, START_CHAT_SUCCESS
+    SET_CURRENT_CHAT_ID, START_CHAT_FAIL, START_CHAT_REQUEST, START_CHAT_SUCCESS, UPDATE_CHAT_MESSAGES
 } from "../constants/chatConstants";
 
 export const getChatListReducer = (state = {groups: []}, action) => {
@@ -16,6 +16,13 @@ export const getChatListReducer = (state = {groups: []}, action) => {
             return {loading: false, error: action.payload}
         case CHATS_LIST_RESET:
             return {groups: []}
+        case UPDATE_CHAT_MESSAGES:
+            let chats = state['chats']
+            let chat = state['chats'].find(function (chat){return chat['id'] === action.payload.chat})
+            chats = state['chats'].filter(function (chat){return chat['id']!== action.payload.chat})
+            chat['messages'].push(action.payload.message)
+            chats.push(chat)
+            return {...state, chats}
         default:
             return state
     }

@@ -1,11 +1,16 @@
 import React, {useEffect, useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
+import {getChatListReducer} from "../redux/reducers/chatsReducers";
+import {UPDATE_CHAT_MESSAGES} from "../redux/constants/chatConstants";
 
 
 const MessageSide = () => {
+    const dispatch = useDispatch()
+
     const {userInfo} = useSelector(state => state.userLogin)
     const {chats} = useSelector(state => state.chats)
+
     const {id: currentChatId} = useSelector(state => state.currentChat)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
@@ -58,10 +63,11 @@ const MessageSide = () => {
     if (chatSocket) {
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            console.log('chating')
+            console.log('data')
             console.log(data)
-
-            // updateChatReducer(chat, data)
+            dispatch({type: UPDATE_CHAT_MESSAGES,
+            payload: data
+            })
         };
     }
 
@@ -71,7 +77,9 @@ const MessageSide = () => {
                 {
                     messages && (
                         messages
-                            .sort(function (x){return x['timestamp']})
+                            .sort((x) => {
+                                console.log(newDateFormat(x['timestamp']))
+                                return newDateFormat(x['timestamp'])})
                             .map(message => (
                             <div key={message.id}
                                  className={`w-25 rounded-1 m-3 p-3 ${message.author === userInfo.username ? "bg-warning" : "bg-info  ms-auto"}`}>
