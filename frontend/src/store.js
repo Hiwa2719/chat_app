@@ -6,7 +6,8 @@ import {
     removeContactReducer,
     signupReducer,
     updateUserProfileReducer,
-    userLoginReducer
+    userLoginReducer,
+    userSearchReducer,
 } from './redux/reducers/userReducers'
 import {getChatListReducer, setCurrentChatIdReducer, startChatReducer} from "./redux/reducers/chatsReducers";
 
@@ -17,6 +18,7 @@ const reducer = combineReducers({
     updateProfile: updateUserProfileReducer,
     userContacts: getUserContactsReducer,
     removeContact: removeContactReducer,
+    searchQuery: userSearchReducer,
 
     chats: getChatListReducer,
     currentChat: setCurrentChatIdReducer,

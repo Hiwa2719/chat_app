@@ -8,6 +8,7 @@ import Chats from "./chats";
 import Loader from "../loader";
 import Alert from "../alert";
 import Contacts from "./contacts";
+import SearchInput from "./searchInput";
 
 
 const SideBar = () => {
@@ -36,7 +37,7 @@ const SideBar = () => {
                         </div>
                     </div>
                     <div className="col-md-9 p-0 ">
-                        <input type="text" className="form-control bg-secondary border-0"/>
+                        <SearchInput/>
                     </div>
                     <div className="col p-0">
                         <div className="hover-light p-2">

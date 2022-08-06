@@ -15,7 +15,9 @@ import {
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_RESET,
-    USER_LOGIN_SUCCESS
+    USER_LOGIN_SUCCESS, USER_SEARCH_FAIL,
+    USER_SEARCH_REQUEST,
+    USER_SEARCH_SUCCESS
 } from "../constants/userConstants";
 import axios from "axios";
 import {CHATS_LIST_RESET, RESET_CURRENT_CHAT_ID} from "../constants/chatConstants";
@@ -190,6 +192,37 @@ export const removeContactAction = (contact) => async (dispatch, getstate) => {
         dispatch({
             type: REMOVE_CONTACT_FAIL,
             payload: e.response && e.response.data.errors ? e.response.data.errors : e.message
+        })
+    }
+}
+
+
+export const userSearchAction = (query) => async (dispatch, getstate) => {
+    try {
+        dispatch({
+            type: USER_SEARCH_REQUEST
+        })
+
+        const {userLogin: {userInfo}} = getstate()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.access}`
+            }
+        }
+
+        const {data} = await axios.get(`/search-user/${query}/`, config)
+
+        dispatch({
+            type: USER_SEARCH_SUCCESS,
+            payload: data
+        })
+
+    } catch (e) {
+        dispatch({
+            type: USER_SEARCH_FAIL,
+            payload: e.response
         })
     }
 }
