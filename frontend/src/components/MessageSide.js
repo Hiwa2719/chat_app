@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {createRef, useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
 import {UPDATE_CHAT_MESSAGES} from "../redux/constants/chatConstants";
@@ -9,7 +9,7 @@ const MessageSide = () => {
 
     const {userInfo} = useSelector(state => state.userLogin)
     const {chats} = useSelector(state => state.chats)
-
+    const inputRef = createRef()
     const {id: currentChatId} = useSelector(state => state.currentChat)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
@@ -18,10 +18,10 @@ const MessageSide = () => {
 
     useEffect(() => {
         if (chats && currentChatId) {
+            inputRef.current.focus()
             const chat = chats.find(chat => chat.id === currentChatId)
             if (chat) {
-                let messages = chat.messages.sort((x, y) => newDateFormat(x['timestamp']) > newDateFormat(y['timestamp']))
-                setMessages(messages)
+                setMessages(chat.messages)
             }
             if (!chatSocket && userInfo) {
                 newChatSocket()
@@ -89,7 +89,8 @@ const MessageSide = () => {
             </div>
             <div className="position-fixed bottom-0 w-100">
                 <input type="text" className="w-100 p-2 ps-3" placeholder="Enter your thoughts here" value={newMessage}
-                       onChange={(e) => setNewMessage(e.target.value)} onKeyUp={enterHandler}/>
+                       onChange={(e) => setNewMessage(e.target.value)} onKeyUp={enterHandler}
+                ref={inputRef}/>
             </div>
         </div>
     )
