@@ -14,5 +14,6 @@ urlpatterns = [
     path('get-contacts/', views.get_contacts, name='get-contacts'),
     path('remove-contact/', views.remove_contact, name='remove-contact'),
     path('start-chat/',views.start_chat, name='start-chat'),
+    path('search-user/<str:query>/', views.search_users, name='search-user'),
     path('<str:room_name>/', views.room, name='room'),
 ]

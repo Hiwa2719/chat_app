@@ -142,3 +142,11 @@ def start_chat(request):
     if created:
         redis_client.delete(f'{user.username}_chats')
     return Response({'chat_id': chat.id, 'created': created})
+
+
+@api_view()
+@permission_classes([IsAuthenticated])
+def search_users(request, query):
+    users = User.objects.filter(username__icontains=query)
+    serializer = UserSerializerWithoutToken(users, many=True)
+    return Response(serializer.data)
