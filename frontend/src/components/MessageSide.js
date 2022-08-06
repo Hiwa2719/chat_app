@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import moment from "moment";
-import {getChatListReducer} from "../redux/reducers/chatsReducers";
 import {UPDATE_CHAT_MESSAGES} from "../redux/constants/chatConstants";
 
 
@@ -21,20 +20,21 @@ const MessageSide = () => {
         if (chats && currentChatId) {
             const chat = chats.find(chat => chat.id === currentChatId)
             if (chat) {
-                setMessages(chat.messages)
+                let messages = chat.messages.sort((x, y) => newDateFormat(x['timestamp']) > newDateFormat(y['timestamp']))
+                setMessages(messages)
             }
-        if (!chatSocket) {
-            newChatSocket()
+            if (!chatSocket && userInfo) {
+                newChatSocket()
+            }
         }
-        }
-    }, [currentChatId, chats])
+    }, [currentChatId, chats, userInfo])
 
     const newChatSocket = () => {
         setChatSocket(new WebSocket(
             'ws://'
             + '127.0.0.1:8000'
             + '/ws/chat/lobby/'
-            + '?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjYyMTExNzIwLCJpYXQiOjE2NTk1MTk3MjAsImp0aSI6IjRlY2Q0NzVmZDk4ODQwZjQ5M2E0YjY4N2ZhYzJmMjBiIiwidXNlcl9pZCI6NDV9.8c7Cg07VBq0UAVPBd4TkvR8grpKkmyOPmz-TuBLvWdg'
+            + `?token=${userInfo.access}`
         ))
     }
 
@@ -63,30 +63,27 @@ const MessageSide = () => {
     if (chatSocket) {
         chatSocket.onmessage = function (e) {
             const data = JSON.parse(e.data);
-            console.log('data')
-            console.log(data)
-            dispatch({type: UPDATE_CHAT_MESSAGES,
-            payload: data
+            dispatch({
+                type: UPDATE_CHAT_MESSAGES,
+                payload: data
             })
         };
     }
 
     return (
         <div className="message-side w-100 h-100">
-            <div className="h-100 pb-5 pt-3">
+            <div className="pb-5 pt-3 overflow-auto" style={{maxHeight: '100vh'}}>
                 {
                     messages && (
                         messages
-                            .sort((x) => {
-                                console.log(newDateFormat(x['timestamp']))
-                                return newDateFormat(x['timestamp'])})
                             .map(message => (
-                            <div key={message.id}
-                                 className={`w-25 rounded-1 m-3 p-3 ${message.author === userInfo.username ? "bg-warning" : "bg-info  ms-auto"}`}>
-                                <p>{message.content}</p>
-                                <div className="small text-end">{newDateFormat(message.timestamp)}</div>
-                            </div>
-                        ))
+                                    <div key={message.id}
+                                         className={`w-25 rounded-1 m-3 p-3 ${message.author === userInfo.username ? "bg-warning" : "bg-info  ms-auto"}`}>
+                                        <p>{message.content}</p>
+                                        <div className="small text-end">{newDateFormat(message.timestamp)}</div>
+                                    </div>
+                                )
+                            )
                     )
                 }
             </div>
