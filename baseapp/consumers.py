@@ -1,5 +1,8 @@
-import redis
 import json
+from datetime import datetime
+
+import pytz
+import redis
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import JsonWebsocketConsumer
 from django.contrib.auth import get_user_model
@@ -36,6 +39,10 @@ class ChatConsumer(JsonWebsocketConsumer):
 
         serialized_message = self.message_to_json(message)
         redis_client.hset(f'{chat.name}_messages', message.id, json.dumps(serialized_message))
+        chat_string = redis_client.hget(f'{self.user}_chats', chat.id)
+        chat_dict = json.loads(chat_string)
+        chat_dict['update'] = str(datetime.now(tz=pytz.UTC))
+        redis_client.hset(f'{self.user}_chats', chat.id, json.dumps(chat_dict))
 
         #  send message to group
         async_to_sync(self.channel_layer.group_send)(
