@@ -6,6 +6,9 @@
   box-sizing: border-box;
 }
 
+body {
+  overflow: hidden;
+}
 
 .hover-light{
   height: 50px;
@@ -49,4 +52,28 @@
   z-index: 100;
   background: rgba(45, 45, 45, 0.74);
   color: black;
+}
+
+
+.search-result {
+  position: absolute;
+  background: #EEEEEE;
+  width: 100%;
+  color: black;
+  border-radius: 0 0 5px 5px;
+  overflow: hidden;
+  z-index: 101;
+  margin-top: 1px;
+}
+
+.search-item:hover {
+  background: darkgray;
+}
+
+.search-background {
+  position: absolute;
+  top: -100px;
+  left: -100px;
+  width: 10000px;
+  height: 10000px;
 }

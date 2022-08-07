@@ -97,7 +97,7 @@ export const removeContactReducer = (state = {}, action) => {
 }
 
 
-export const userSearchReducer = (state={users: []}, action) => {
+export const userSearchReducer = (state={}, action) => {
     switch (action.type) {
         case USER_SEARCH_REQUEST:
             return {loading: true}

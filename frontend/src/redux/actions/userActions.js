@@ -212,7 +212,7 @@ export const userSearchAction = (query) => async (dispatch, getstate) => {
             }
         }
 
-        const {data} = await axios.get(`/search-user/${query}/`, config)
+        const {data} = await axios.get(`/chat/search-user/${query}/`, config)
 
         dispatch({
             type: USER_SEARCH_SUCCESS,

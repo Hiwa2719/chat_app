@@ -1,24 +1,68 @@
-import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import React from "react";
+import {useDispatch, useSelector} from "react-redux";
+import Loader from "../loader";
+import {userSearchAction} from "../../redux/actions/userActions";
+import {USER_SEARCH_RESET} from "../../redux/constants/userConstants";
 
 
 const SearchInput = () => {
-    const [query, setQuery] = useState('')
+    const dispatch = useDispatch()
     const {users, loading} = useSelector(state => state.searchQuery)
 
+    const queryHandler = (e) => {
+        if (e.target.value) {
+            dispatch(userSearchAction(e.target.value))
+        }
+    }
+
+    const closeHandler = () => {
+        dispatch({
+            type: USER_SEARCH_RESET
+        })
+    }
+
     return (
-        <div>
-            <input type="text" className="form-control bg-secondary border-0" value={query}
-                   onChange={(e) => setQuery(e.target.value)}/>
-            <div className="border-1">
+        <div className="position-relative">
+            <div className="position-relative">
+                <input type="text" className="form-control bg-secondary border-0"
+                       onChange={queryHandler}/>
                 {
-                    users.map((item, index) => (
-                        <div key={index}>
-                            {item.username}
+                    loading && (
+                        <div className="position-absolute text-info" style={{right: '5px', top: '2px'}}>
+                            <Loader/>
                         </div>
-                    ))
+                    )
                 }
             </div>
+            {
+                users && (
+                    <>
+                        <div className="search-background" onClick={closeHandler}></div>
+
+                        <div className="search-result bg-secondary">
+
+                            {
+                                users.map((item, index) => (
+                                    <div key={index} className="search-item p-1">
+                                        <div className="row text-left">
+                                            <div className="col-12">
+                                                username: {item.username}
+                                            </div>
+                                            {
+                                                item.first_name && (
+                                                    <div className="col-12">
+                                                        {item.first_name}
+                                                    </div>
+                                                )
+                                            }
+                                        </div>
+                                    </div>
+                                ))
+                            }
+                        </div>
+                    </>
+                )
+            }
         </div>
     )
 }
