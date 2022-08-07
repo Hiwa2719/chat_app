@@ -147,6 +147,6 @@ def start_chat(request):
 @api_view()
 @permission_classes([IsAuthenticated])
 def search_users(request, query):
-    users = User.objects.filter(username__icontains=query)
+    users = User.objects.filter(username__icontains=query).exclude(username=request.user.username)
     serializer = UserSerializerWithoutToken(users, many=True)
     return Response(serializer.data)

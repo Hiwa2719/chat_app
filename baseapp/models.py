@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import pytz
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
@@ -38,7 +39,11 @@ class ChatManager(models.Manager):
         contact = User.objects.get(id=contact_id)
         chat = self.get_queryset().filter(members=user).filter(members__id=contact_id).first()
         if not chat:
-            chat = Chat.objects.create(name=f'{user.username}_{contact.username}_chat')
+            now = datetime.now(tz=pytz.UTC)
+            chat = Chat.objects.create(
+                name=f'{user.username}_{contact.username}_chat',
+                update=now
+            )
             chat.members.set([user, contact])
             chat.save()
             created = True
