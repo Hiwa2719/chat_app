@@ -9,6 +9,7 @@ from django.contrib.auth import get_user_model
 
 from .models import Message, Chat
 from .serializers import MessageSerializer
+from .utils import get_chats
 
 User = get_user_model()
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
@@ -65,11 +66,11 @@ class ChatConsumer(JsonWebsocketConsumer):
     def connect(self):
         # Join room group
         self.user = self.scope['user']
-        self.chats = self.user.chat_set.all()
+        chats = get_chats(self.user)
 
-        for chat in self.chats:
+        for chat in chats:
             async_to_sync(self.channel_layer.group_add)(
-                chat.name,
+                chat['name'],
                 self.channel_name
             )
 
@@ -78,17 +79,18 @@ class ChatConsumer(JsonWebsocketConsumer):
     def disconnect(self, close_code):
         # Leave room group
         if hasattr(self, 'user'):
-            for chat in self.chats:
+            for chat in get_chats(self.user):
                 async_to_sync(self.channel_layer.group_discard)(
-                    chat.name,
+                    chat['name'],
                     self.channel_name
                 )
 
     # Receive message from WebSocket
     def receive_json(self, content, **kwargs):
         chat = Chat.objects.get(id=content['chat'])
-        # todo update self.chats command
-        if chat in self.chats:
+        chat_name_list = [chat['name'] for chat in get_chats(self.user)]
+
+        if chat.name in chat_name_list:
             self.COMMANDS[content['command']](self, content, chat)
 
     def send_message(self, event):

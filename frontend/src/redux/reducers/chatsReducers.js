@@ -2,8 +2,14 @@ import {
     CHATS_LIST_FAIL,
     CHATS_LIST_REQUEST,
     CHATS_LIST_RESET,
-    CHATS_LIST_SUCCESS, RESET_CURRENT_CHAT_ID,
-    SET_CURRENT_CHAT_ID, START_CHAT_FAIL, START_CHAT_REQUEST, START_CHAT_SUCCESS, UPDATE_CHAT_MESSAGES
+    CHATS_LIST_SUCCESS,
+    RESET_CURRENT_CHAT_ID,
+    SET_CURRENT_CHAT_ID,
+    START_CHAT_FAIL,
+    START_CHAT_REQUEST,
+    START_CHAT_SUCCESS,
+    UPDATE_CHAT_MESSAGES,
+    UPDATE_CHATS_LIST
 } from "../constants/chatConstants";
 
 function chatsSorting(chats){
@@ -26,6 +32,9 @@ export const getChatListReducer = (state = {groups: []}, action) => {
             return {loading: false, error: action.payload}
         case CHATS_LIST_RESET:
             return {groups: []}
+        case UPDATE_CHATS_LIST:
+            state.chats.push(action.payload)
+            return state
         case UPDATE_CHAT_MESSAGES:
             let {chats} = state
             let chat = chats.find(function (chat){return chat['id'] === action.payload.chat})

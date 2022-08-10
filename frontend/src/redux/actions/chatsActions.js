@@ -5,7 +5,8 @@ import {
     SET_CURRENT_CHAT_ID,
     START_CHAT_FAIL,
     START_CHAT_REQUEST,
-    START_CHAT_SUCCESS
+    START_CHAT_SUCCESS,
+    UPDATE_CHATS_LIST
 } from "../constants/chatConstants";
 import axios from "axios";
 
@@ -63,14 +64,17 @@ export const startChatAction = (contactId) => async (dispatch, getState) => {
             type: START_CHAT_SUCCESS
         })
 
+        if (data.created) {
+            dispatch({
+                type: UPDATE_CHATS_LIST,
+                payload: data
+            })
+        }
+
         dispatch({
             type: SET_CURRENT_CHAT_ID,
-            payload: data.chat_id
+            payload: data.id
         })
-
-        if (data.created) {
-            dispatch(getChatListAction())
-        }
 
 
     } catch (e) {

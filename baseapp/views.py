@@ -12,6 +12,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Chat
 from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer, UserSerializer, ChatSerializer, \
     UserSerializerWithoutToken
+from .utils import get_chats
 
 User = get_user_model()
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
@@ -63,36 +64,7 @@ def update_profile(request):
 @permission_classes([IsAuthenticated])
 def user_chats(request):
     user = request.user
-    key = f'{user.username}_chats'
-    if redis_client.exists(key):
-        redis_dict = redis_client.hgetall(key)
-        chats = list()
-        for chat in redis_dict.values():
-            chat = json.loads(chat)
-            messages = redis_client.hgetall(f'{chat["name"]}_messages')
-            msg = list()
-            for key, value in messages.items():
-                msg.append(
-                    json.loads(value)
-                )
-            # msg = sorted(msg, key=lambda x: x['id'])
-            chat['messages'] = msg
-            chats.append(
-                chat
-            )
-        # chats = sorted(chats, key=lambda x: x['update'], reverse=True)
-    else:
-        chats_queryset = user.chat_set.all()
-        chats = ChatSerializer(chats_queryset, many=True).data
-        for chat in chats:
-            messages = chat['messages']
-            messages_key = f'{chat["name"]}_messages'
-            for message in messages:
-                redis_client.hset(messages_key, message['id'], json.dumps(message))
-            modified_chat = dict(chat)
-            del modified_chat['messages']
-            redis_client.hset(key, chat['id'], json.dumps(modified_chat))
-
+    chats = get_chats(user)
     return Response(chats)
 
 
@@ -139,9 +111,10 @@ def remove_contact(request):
 def start_chat(request):
     user = request.user
     chat, created = Chat.objects.get_chat(request)
+    serializer = ChatSerializer(chat)
     if created:
         redis_client.delete(f'{user.username}_chats')
-    return Response({'chat_id': chat.id, 'created': created})
+    return Response({**serializer.data, 'created': created})
 
 
 @api_view()
