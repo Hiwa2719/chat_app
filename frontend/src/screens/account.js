@@ -1,6 +1,7 @@
 import React from "react";
 import SideBar from "../components/sidebar/sideBar";
 import MessageSide from "../components/MessageSide";
+import UserDetailModal from "../components/UserDetailModal";
 
 
 const Account = () => {
@@ -12,6 +13,7 @@ const Account = () => {
             <div className="col p-0 m-0">
                 <MessageSide/>
             </div>
+            <UserDetailModal/>
         </div>
     )
 }

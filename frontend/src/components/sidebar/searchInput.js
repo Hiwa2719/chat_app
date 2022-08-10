@@ -1,9 +1,8 @@
-import React from "react";
+import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
 import {userSearchAction} from "../../redux/actions/userActions";
-import {USER_SEARCH_RESET} from "../../redux/constants/userConstants";
-import {startChatAction} from "../../redux/actions/chatsActions";
+import {SET_SELECTED_USER, USER_SEARCH_RESET} from "../../redux/constants/userConstants";
 
 
 const SearchInput = () => {
@@ -23,8 +22,10 @@ const SearchInput = () => {
     }
 
     const selectUserHandler = (user) => {
-        dispatch(startChatAction(user.id))
-        closeHandler()
+        dispatch({
+            type: SET_SELECTED_USER,
+            payload: {selectedUser: user, contact: false}
+        })
     }
 
     return (
@@ -49,7 +50,8 @@ const SearchInput = () => {
 
                             {
                                 users.map((user, index) => (
-                                    <div key={index} className="search-item p-1" onClick={(e) => selectUserHandler(user)}>
+                                    <div key={index} className="search-item p-1"
+                                         onClick={(e) => selectUserHandler(user)}>
                                         <div className="row text-left">
                                             <div className="col-12">
                                                 username: {user.username}

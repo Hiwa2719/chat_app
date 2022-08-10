@@ -1,13 +1,21 @@
 import React, {useState} from "react";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
 import Alert from "../alert";
-import ContactDetailModal from "./contactDetailModal";
+import {SET_SELECTED_USER} from "../../redux/constants/userConstants";
 
 
 const Contacts = () => {
+    const dispatch = useDispatch()
     const {loading: contactLoading, contacts, error} = useSelector(state => state.userContacts)
-    const [selectedContact, setSelectedContact] = useState('')
+    const {selectedUser} = useSelector(state => state.selectedUser)
+
+    const setSelectedUser = (contact) => {
+        dispatch({
+            type: SET_SELECTED_USER,
+            payload: {selectedUser: contact, contact: true}
+        })
+    }
 
     return (
         <div className="text-light pt-3">
@@ -24,15 +32,12 @@ const Contacts = () => {
                 contacts &&
                 contacts.map(contact => (
                     <div key={contact.id}
-                         className={`ps-3 py-3 ${selectedContact.id === contact.id ? "item-clicked" : "sidebar-item"}`}
-                         onClick={() => setSelectedContact(contact)}>
+                         className={`ps-3 py-3 ${ selectedUser && selectedUser.id === contact.id ? "item-clicked" : "sidebar-item"}`}
+                         onClick={() => setSelectedUser(contact)}>
                         <h5>@{contact.username}</h5>
                         <div>{contact.first_name} {contact.last_name}</div>
                     </div>
                 ))
-            }
-            {
-                selectedContact && <ContactDetailModal setSelectedContact={setSelectedContact} contact={selectedContact}/>
             }
         </div>
     )

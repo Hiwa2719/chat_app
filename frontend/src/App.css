@@ -49,7 +49,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  z-index: 110;
   background: rgba(45, 45, 45, 0.74);
   color: black;
 }

@@ -4,6 +4,7 @@ import {composeWithDevTools} from "redux-devtools-extension";
 import {
     getUserContactsReducer,
     removeContactReducer,
+    selectedUserReducer,
     signupReducer,
     updateUserProfileReducer,
     userLoginReducer,
@@ -17,6 +18,7 @@ const reducer = combineReducers({
     signup: signupReducer,
     updateProfile: updateUserProfileReducer,
     userContacts: getUserContactsReducer,
+    selectedUser: selectedUserReducer,
     removeContact: removeContactReducer,
     searchQuery: userSearchReducer,
 

@@ -1,7 +1,7 @@
 import {
     REMOVE_CONTACT_FAIL,
     REMOVE_CONTACT_REQUEST,
-    REMOVE_CONTACT_SUCCESS,
+    REMOVE_CONTACT_SUCCESS, RESET_SELECTED_USER, SET_SELECTED_USER,
     SIGNUP_FAIL,
     SIGNUP_REQUEST,
     SIGNUP_RESET,
@@ -106,6 +106,18 @@ export const userSearchReducer = (state={}, action) => {
         case USER_SEARCH_FAIL:
             return {loading: false, error: action.payload}
         case USER_SEARCH_RESET:
+            return {}
+        default:
+            return state
+    }
+}
+
+
+export const selectedUserReducer = (state={}, action) => {
+    switch (action.type) {
+        case SET_SELECTED_USER:
+            return action.payload
+        case RESET_SELECTED_USER:
             return {}
         default:
             return state
