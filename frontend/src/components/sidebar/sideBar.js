@@ -40,9 +40,8 @@ const SideBar = () => {
                         <SearchInput/>
                     </div>
                     <div className="col p-0">
-                        <div className="hover-light p-2">
-                            <i className="fa-solid fa-lock-open" style={{"fontSize": "1.5rem"}}
-                               onClick={lockHandler}></i>
+                        <div className="hover-light p-2" onClick={lockHandler}>
+                            <i className="fa-solid fa-lock-open" style={{"fontSize": "1.5rem"}}></i>
                         </div>
                     </div>
                 </div>
