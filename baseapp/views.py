@@ -108,6 +108,28 @@ def remove_contact(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+def add_contact(request):
+    try:
+        contact_id = request.data.get('id')
+        user = User.objects.get(id=contact_id)
+    except User.DoesNotExist:
+        return Response('this user does not exists', status=status.HTTP_400_BAD_REQUEST)
+    person = request.user.person
+    person.contacts.add(user)
+    key = f'{request.user.username}_contacts'
+
+    if redis_client.exists(key):
+        string_contacts = redis_client.get(key)
+        contacts = json.loads(string_contacts)
+        serializer = UserSerializerWithoutToken(user)
+        contacts.append(serializer.data)
+        redis_client.set(key, json.dumps(contacts))
+        return Response(contacts)
+    return redirect(reverse('baseapp:get-contacts'))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def start_chat(request):
     user = request.user
     chat, created = Chat.objects.get_chat(request)

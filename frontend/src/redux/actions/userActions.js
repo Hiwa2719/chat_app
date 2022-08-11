@@ -1,4 +1,7 @@
 import {
+    ADDING_CONTACT_FAIL,
+    ADDING_CONTACT_REQUEST,
+    ADDING_CONTACT_SUCCESS,
     REMOVE_CONTACT_FAIL,
     REMOVE_CONTACT_REQUEST,
     REMOVE_CONTACT_SUCCESS,
@@ -15,7 +18,8 @@ import {
     USER_LOGIN_FAIL,
     USER_LOGIN_REQUEST,
     USER_LOGIN_RESET,
-    USER_LOGIN_SUCCESS, USER_SEARCH_FAIL,
+    USER_LOGIN_SUCCESS,
+    USER_SEARCH_FAIL,
     USER_SEARCH_REQUEST,
     USER_SEARCH_SUCCESS
 } from "../constants/userConstants";
@@ -223,6 +227,39 @@ export const userSearchAction = (query) => async (dispatch, getstate) => {
         dispatch({
             type: USER_SEARCH_FAIL,
             payload: e.response
+        })
+    }
+}
+
+
+export const addingContactAction = (userData) => async (dispatch, getstate) => {
+    try {
+        dispatch({
+            type: ADDING_CONTACT_REQUEST
+        })
+
+        const {userLogin: {userInfo}} = getstate()
+
+        const config = {
+            headers: {
+                'Content-type': 'application/json',
+                Authorization: `Bearer ${userInfo.access}`
+            }
+        }
+
+        const {data} = await axios.post('/chat/add-contact/', userData, config)
+
+        dispatch({type: ADDING_CONTACT_SUCCESS})
+
+        dispatch({
+            type: USER_CONTACTS_SUCCESS,
+            payload: data
+        })
+
+    } catch (e) {
+        dispatch({
+            type: ADDING_CONTACT_FAIL,
+            payload: e.response && e.response.data.errors ? e.response.data.errors : e.message
         })
     }
 }

@@ -5,7 +5,7 @@ import {removeContactAction} from "../redux/actions/userActions";
 import Loader from "./loader";
 import {startChatAction} from "../redux/actions/chatsActions";
 import {RESET_SELECTED_USER} from "../redux/constants/userConstants";
-
+import {addingContactAction} from "../redux/actions/userActions";
 
 const UserDetailModal = () => {
     const {selectedUser, contact} = useSelector(state => state.selectedUser)
@@ -29,7 +29,8 @@ const UserDetailModal = () => {
     }
 
     const addingHandler = () => {
-        console.log('adding to contacts')
+        dispatch(addingContactAction({id: selectedUser.id}))
+        closeHandler()
     }
 
     return (
