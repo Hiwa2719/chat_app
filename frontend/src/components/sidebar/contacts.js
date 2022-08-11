@@ -1,8 +1,8 @@
-import React, {useState} from "react";
+import React from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
 import Alert from "../alert";
-import {SET_SELECTED_USER} from "../../redux/constants/userConstants";
+import {SET_MODAL_USER} from "../../redux/constants/userConstants";
 
 
 const Contacts = () => {
@@ -12,7 +12,7 @@ const Contacts = () => {
 
     const setSelectedUser = (contact) => {
         dispatch({
-            type: SET_SELECTED_USER,
+            type: SET_MODAL_USER,
             payload: {selectedUser: contact, contact: true}
         })
     }

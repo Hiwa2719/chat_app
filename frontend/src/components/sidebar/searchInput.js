@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
 import {userSearchAction} from "../../redux/actions/userActions";
-import {SET_SELECTED_USER, USER_SEARCH_RESET} from "../../redux/constants/userConstants";
+import {SET_MODAL_USER, SET_SELECTED_USER, USER_SEARCH_RESET} from "../../redux/constants/userConstants";
 
 
 const SearchInput = () => {
@@ -23,7 +23,7 @@ const SearchInput = () => {
 
     const selectUserHandler = (user) => {
         dispatch({
-            type: SET_SELECTED_USER,
+            type: SET_MODAL_USER,
             payload: {selectedUser: user, contact: false}
         })
     }

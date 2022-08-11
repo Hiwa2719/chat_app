@@ -14,7 +14,8 @@ const MessageSide = () => {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState('')
     const [chatSocket, setChatSocket] = useState(false)
-
+    const [selectedUser, setSelectedUser] = useState('')
+    const {members} = useSelector(state => state.currentChat)
 
     useEffect(() => {
         if (chats && currentChatId) {
@@ -26,6 +27,10 @@ const MessageSide = () => {
             if (!chatSocket && userInfo) {
                 newChatSocket()
             }
+        }
+        if (members){
+            const otherSide = members.find(member => member.username !== userInfo.username)
+            setSelectedUser(otherSide)
         }
     }, [currentChatId, chats, userInfo])
 
@@ -72,6 +77,9 @@ const MessageSide = () => {
 
     return (
         <div className="message-side w-100 h-100">
+            <div className="bg-dark text-light p-3">
+                {selectedUser && selectedUser.username}
+            </div>
             <div className="pb-5 pt-3 overflow-auto" style={{maxHeight: '100vh'}}>
                 {
                     messages && (

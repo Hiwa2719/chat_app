@@ -2,17 +2,17 @@ import React, {useState} from "react";
 import SideBarItem from "./sideBarItem";
 import {useDispatch, useSelector} from "react-redux";
 import Loader from "../loader";
-import {SET_CURRENT_CHAT_ID} from "../../redux/constants/chatConstants";
+import {SET_CURRENT_CHAT} from "../../redux/constants/chatConstants";
 
 
 const Chats = () => {
     const dispatch = useDispatch()
     const {chats, loading: chatsLoading, error: chatsError} = useSelector(state => state.chats)
 
-    const clickHandler = (id) => {
+    const clickHandler = (chat) => {
         dispatch({
-            type: SET_CURRENT_CHAT_ID,
-            payload: id
+            type: SET_CURRENT_CHAT,
+            payload: chat
         })
     }
 
@@ -26,7 +26,7 @@ const Chats = () => {
             {
                 chats && (
                     chats.map(chat => chat.messages.length >= 1 && (
-                        <div key={chat.id} onClick={e => clickHandler(chat.id)}>
+                        <div key={chat.id} onClick={e => clickHandler(chat)}>
                             <SideBarItem item={chat}/>
                         </div>
                     )))

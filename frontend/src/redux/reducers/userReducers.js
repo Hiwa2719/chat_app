@@ -1,7 +1,7 @@
 import {
     REMOVE_CONTACT_FAIL,
     REMOVE_CONTACT_REQUEST,
-    REMOVE_CONTACT_SUCCESS, RESET_SELECTED_USER, SET_SELECTED_USER,
+    REMOVE_CONTACT_SUCCESS, RESET_MODAL_USER, RESET_SELECTED_USER, SET_MODAL_USER, SET_SELECTED_USER,
     SIGNUP_FAIL,
     SIGNUP_REQUEST,
     SIGNUP_RESET,
@@ -118,6 +118,18 @@ export const selectedUserReducer = (state={}, action) => {
         case SET_SELECTED_USER:
             return action.payload
         case RESET_SELECTED_USER:
+            return {}
+        default:
+            return state
+    }
+}
+
+
+export const modalUserReducer = (state={}, action) => {
+    switch (action.type) {
+        case SET_MODAL_USER:
+            return action.payload
+        case RESET_MODAL_USER:
             return {}
         default:
             return state

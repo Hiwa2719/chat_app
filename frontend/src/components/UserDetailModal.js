@@ -1,20 +1,19 @@
 import React from "react";
 import '../App.css'
 import {useDispatch, useSelector} from "react-redux";
-import {removeContactAction} from "../redux/actions/userActions";
+import {addingContactAction, removeContactAction} from "../redux/actions/userActions";
 import Loader from "./loader";
 import {startChatAction} from "../redux/actions/chatsActions";
-import {RESET_SELECTED_USER} from "../redux/constants/userConstants";
-import {addingContactAction} from "../redux/actions/userActions";
+import {RESET_MODAL_USER, SET_SELECTED_USER} from "../redux/constants/userConstants";
 
 const UserDetailModal = () => {
-    const {selectedUser, contact} = useSelector(state => state.selectedUser)
+    const {selectedUser, contact} = useSelector(state => state.modalUser)
     const dispatch = useDispatch()
     const {loading: startChatLoading} = useSelector(state => state.startChat)
 
     const closeHandler = () => {
         dispatch({
-            type: RESET_SELECTED_USER
+            type: RESET_MODAL_USER
         })
     }
 
@@ -25,6 +24,10 @@ const UserDetailModal = () => {
 
     const messageHandler = () => {
         dispatch(startChatAction(selectedUser.id))
+        dispatch({
+            type: SET_SELECTED_USER,
+            payload: {selectedUser: selectedUser}
+        })
         closeHandler()
     }
 

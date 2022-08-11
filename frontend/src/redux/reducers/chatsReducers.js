@@ -3,8 +3,8 @@ import {
     CHATS_LIST_REQUEST,
     CHATS_LIST_RESET,
     CHATS_LIST_SUCCESS,
-    RESET_CURRENT_CHAT_ID,
-    SET_CURRENT_CHAT_ID,
+    RESET_CURRENT_CHAT,
+    SET_CURRENT_CHAT,
     START_CHAT_FAIL,
     START_CHAT_REQUEST,
     START_CHAT_SUCCESS,
@@ -49,11 +49,11 @@ export const getChatListReducer = (state = {groups: []}, action) => {
     }
 }
 
-export const setCurrentChatIdReducer = (state={}, action) => {
+export const setCurrentChatReducer = (state={}, action) => {
     switch (action.type) {
-        case SET_CURRENT_CHAT_ID:
-            return {id: action.payload}
-        case RESET_CURRENT_CHAT_ID:
+        case SET_CURRENT_CHAT:
+            return action.payload
+        case RESET_CURRENT_CHAT:
             return {}
         default:
             return state

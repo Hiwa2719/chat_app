@@ -74,6 +74,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
 class ChatSerializer(serializers.ModelSerializer):
     messages = serializers.SerializerMethodField()
+    members = serializers.SerializerMethodField()
 
     class Meta:
         model = Chat
@@ -85,4 +86,9 @@ class ChatSerializer(serializers.ModelSerializer):
         if count > 10:
             messages = messages[count-10:]
         serializer = MessageSerializer(messages, many=True)
+        return serializer.data
+
+    def get_members(self, obj):
+        members = obj.members.all()
+        serializer = UserSerializerWithoutToken(members, many=True)
         return serializer.data

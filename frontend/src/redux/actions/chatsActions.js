@@ -2,7 +2,7 @@ import {
     CHATS_LIST_FAIL,
     CHATS_LIST_REQUEST,
     CHATS_LIST_SUCCESS,
-    SET_CURRENT_CHAT_ID,
+    SET_CURRENT_CHAT,
     START_CHAT_FAIL,
     START_CHAT_REQUEST,
     START_CHAT_SUCCESS,
@@ -72,8 +72,8 @@ export const startChatAction = (contactId) => async (dispatch, getState) => {
         }
 
         dispatch({
-            type: SET_CURRENT_CHAT_ID,
-            payload: data.id
+            type: SET_CURRENT_CHAT,
+            payload: data
         })
 
 

@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 import {composeWithDevTools} from "redux-devtools-extension";
 import {
     getUserContactsReducer,
+    modalUserReducer,
     removeContactReducer,
     selectedUserReducer,
     signupReducer,
@@ -10,7 +11,7 @@ import {
     userLoginReducer,
     userSearchReducer,
 } from './redux/reducers/userReducers'
-import {getChatListReducer, setCurrentChatIdReducer, startChatReducer} from "./redux/reducers/chatsReducers";
+import {getChatListReducer, setCurrentChatReducer, startChatReducer} from "./redux/reducers/chatsReducers";
 
 
 const reducer = combineReducers({
@@ -19,11 +20,12 @@ const reducer = combineReducers({
     updateProfile: updateUserProfileReducer,
     userContacts: getUserContactsReducer,
     selectedUser: selectedUserReducer,
+    modalUser: modalUserReducer,
     removeContact: removeContactReducer,
     searchQuery: userSearchReducer,
 
     chats: getChatListReducer,
-    currentChat: setCurrentChatIdReducer,
+    currentChat: setCurrentChatReducer,
     startChat: startChatReducer,
 })
 

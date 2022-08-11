@@ -24,7 +24,7 @@ import {
     USER_SEARCH_SUCCESS
 } from "../constants/userConstants";
 import axios from "axios";
-import {CHATS_LIST_RESET, RESET_CURRENT_CHAT_ID} from "../constants/chatConstants";
+import {CHATS_LIST_RESET, RESET_CURRENT_CHAT} from "../constants/chatConstants";
 
 
 export const userLoginAction = (userInfo) => async (dispatch) => {
@@ -97,7 +97,7 @@ export const logoutAction = () => async (dispatch) => {
     })
 
     dispatch({type: UPDATE_USER_PROFILE_RESET})
-    dispatch({type: RESET_CURRENT_CHAT_ID})
+    dispatch({type: RESET_CURRENT_CHAT})
     dispatch({type: SIGNUP_RESET})
 }
 

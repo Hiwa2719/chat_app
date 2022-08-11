@@ -5,8 +5,6 @@ import {getChatListAction} from "../../redux/actions/chatsActions";
 import {getUserContactsAction, logoutAction} from '../../redux/actions/userActions'
 import Profile from "./profile";
 import Chats from "./chats";
-import Loader from "../loader";
-import Alert from "../alert";
 import Contacts from "./contacts";
 import SearchInput from "./searchInput";
 
