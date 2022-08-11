@@ -38,6 +38,9 @@ body {
 
 .message-side{
   background: rgb(51, 51, 54);
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .modal-prop {
@@ -76,4 +79,5 @@ body {
   left: -100px;
   width: 10000px;
   height: 10000px;
+  z-index: 100;
 }

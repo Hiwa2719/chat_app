@@ -80,11 +80,11 @@ const MessageSide = () => {
     }
 
     return (
-        <div className="message-side w-100 h-100">
-            <div className="bg-dark text-light p-3">
+        <div className="message-side">
+            <div className="position-fixed w-100 bg-dark text-light p-3" style={{zIndex: 90}}>
                 {selectedUser && selectedUser.username}
             </div>
-            <div className="pb-5 pt-3 overflow-auto" style={{maxHeight: '100vh'}}>
+            <div className="pb-5 pt-5 overflow-auto position-absolute top-0 w-100" style={{maxHeight: '100vh'}}>
                 {
                     messages && (
                         messages
