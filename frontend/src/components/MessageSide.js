@@ -73,6 +73,10 @@ const MessageSide = () => {
                 payload: data
             })
         };
+
+        chatSocket.onclose = function (e) {
+            console.error('Chat socket closed unexpectedly');
+        };
     }
 
     return (
