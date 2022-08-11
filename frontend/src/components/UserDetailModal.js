@@ -8,6 +8,7 @@ import {RESET_MODAL_USER, SET_SELECTED_USER} from "../redux/constants/userConsta
 
 const UserDetailModal = () => {
     const {selectedUser, contact} = useSelector(state => state.modalUser)
+    const {contacts} = useSelector(state => state.userContacts)
     const dispatch = useDispatch()
     const {loading: startChatLoading} = useSelector(state => state.startChat)
 
@@ -32,7 +33,12 @@ const UserDetailModal = () => {
     }
 
     const addingHandler = () => {
-        dispatch(addingContactAction({id: selectedUser.id}))
+        if (contacts) {
+            const contact = contacts.find(contact => contact.id === selectedUser.id)
+            if (!contact) {
+                dispatch(addingContactAction({id: selectedUser.id}))
+            }
+        }
         closeHandler()
     }
 
