@@ -79,13 +79,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'chat.wsgi.application'
 ASGI_APPLICATION = 'chat.asgi.application'
 
-REDIS_ENDPOINT = 'redis-12180.c274.us-east-1-3.ec2.cloud.redislabs.com'
-REDIS_PORT = 12180
+REDIS_ENDPOINT = os.environ.get('REDIS_ENDPOINT')
+REDIS_PORT = os.environ.get('REDIS_PORT')
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(REDIS_ENDPOINT, REDIS_PORT)],
+            "hosts": [(f"redis://:{REDIS_PASSWORD}@{REDIS_ENDPOINT}:{REDIS_PORT}/0")],
         },
     },
 }

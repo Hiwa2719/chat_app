@@ -80,6 +80,7 @@ ASGI_APPLICATION = 'chat.asgi.application'
 
 REDIS_ENDPOINT = '127.0.0.1'
 REDIS_PORT = 6379
+REDIS_PASSWORD = None
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
