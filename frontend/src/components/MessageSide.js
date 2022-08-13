@@ -35,9 +35,11 @@ const MessageSide = () => {
     }, [currentChatId, chats, userInfo])
 
     const newChatSocket = () => {
+        const domain = window.location.host
+        console.log(domain)
         setChatSocket(new WebSocket(
             'ws://'
-            + window.location.host
+            + domain
             + '/ws/chat/'
             + `?token=${userInfo.access}`
         ))
