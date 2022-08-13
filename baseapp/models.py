@@ -1,14 +1,14 @@
 from datetime import datetime
 
 import pytz
-import redis
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-redis_client = redis.Redis('localhost', port=6379, db=0)
+from .utils import redis_client
+
 User = get_user_model()
 
 

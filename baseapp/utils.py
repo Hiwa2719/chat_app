@@ -1,10 +1,10 @@
 import json
 
 import redis
-
+from django.conf import settings
 from .serializers import ChatSerializer
 
-redis_client = redis.Redis('localhost')
+redis_client = redis.Redis(settings.REDIS_ENDPOINT, settings.REDIS_PORT)
 
 
 def get_chats(user):

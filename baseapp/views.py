@@ -1,6 +1,5 @@
 import json
 
-import redis
 from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect, reverse
 from rest_framework import status
@@ -12,10 +11,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import Chat
 from .serializers import MyTokenObtainPairSerializer, UserCreationSerializer, UserSerializer, ChatSerializer, \
     UserSerializerWithoutToken
-from .utils import get_chats
+from .utils import get_chats, redis_client
 
 User = get_user_model()
-redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
 
 def index_view(request):
