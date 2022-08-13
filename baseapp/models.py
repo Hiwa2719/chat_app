@@ -7,7 +7,6 @@ from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-from .utils import redis_client
 
 User = get_user_model()
 
@@ -49,6 +48,7 @@ class ChatManager(models.Manager):
             chat.members.set([user, contact])
             chat.save()
             created = True
+            from .utils import redis_client
             redis_client.delete(f'{contact.username}_chats')
         return chat, created
 
